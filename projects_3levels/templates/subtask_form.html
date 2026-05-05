@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ title }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<div class="header">
+    <h1>Projects App</h1>
+    <span class="breadcrumb">
+        <a href="{{ url_for('index') }}">Dashboard</a>
+        <span>&rsaquo;</span>
+        <a href="{{ url_for('tasks', project_id=project['id']) }}">{{ project['name'] }}</a>
+        <span>&rsaquo;</span>
+        <a href="{{ url_for('subtasks', task_id=task['id']) }}">{{ task['name'] }}</a>
+        <span>&rsaquo;</span> {{ title }}
+    </span>
+</div>
+<div class="container">
+    <div class="form-card">
+        <h2>{{ title }}</h2>
+        <form method="POST">
+            <div class="form-group">
+                <label>Sub-task Name *</label>
+                <input type="text" name="name" value="{{ subtask['name'] if subtask else '' }}" required>
+            </div>
+            <div class="form-group">
+                <label>Description</label>
+                <textarea name="description">{{ subtask['description'] if subtask else '' }}</textarea>
+            </div>
+            <div class="form-group">
+                <label>Status</label>
+                <select name="status">
+                    {% for s in status_options %}
+                    <option value="{{ s }}" {% if subtask and subtask['status'] == s %}selected{% elif not subtask and s == 'Not Started' %}selected{% endif %}>{{ s }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Due Date</label>
+                <input type="date" name="due_date" value="{{ subtask['due_date'] if subtask and subtask['due_date'] else '' }}">
+            </div>
+            <div class="form-actions">
+                <button type="submit" class="btn btn-success">Save Sub-task</button>
+                <a href="{{ url_for('subtasks', task_id=task['id']) }}" class="btn btn-secondary">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+</body>
+</html>

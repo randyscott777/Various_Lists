@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Add Account</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <h1>Add Account</h1>
+        <a href="{{ url_for('index') }}" class="btn btn-back">Back</a>
+    </div>
+
+    <form method="POST" action="{{ url_for('add') }}" class="account-form">
+        <div class="form-group">
+            <label for="account_number">Account Number</label>
+            <input type="text" id="account_number" name="account_number" required placeholder="e.g. 1000">
+        </div>
+        <div class="form-group">
+            <label for="account_name">Account Name</label>
+            <input type="text" id="account_name" name="account_name" required placeholder="e.g. Cash">
+        </div>
+        <div class="form-group">
+            <label for="account_type">Account Type</label>
+            <select id="account_type" name="account_type" required>
+                <option value="">-- Select Type --</option>
+                {% for t in account_types %}
+                <option value="{{ t }}">{{ t }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="account_subtype">Account Subtype</label>
+            <select id="account_subtype" name="account_subtype" required>
+                <option value="">-- Select Subtype --</option>
+                {% for type, subtypes in account_subtypes.items() %}
+                <optgroup label="{{ type }}">
+                    {% for s in subtypes %}
+                    <option value="{{ s }}">{{ s }}</option>
+                    {% endfor %}
+                </optgroup>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="is_active">Active</label>
+            <select id="is_active" name="is_active" required>
+                <option value="Yes">Yes</option>
+                <option value="No">No</option>
+            </select>
+        </div>
+        <div class="form-actions">
+            <button type="submit" class="btn btn-add">Save Account</button>
+            <a href="{{ url_for('index') }}" class="btn btn-back">Cancel</a>
+        </div>
+    </form>
+</div>
+</body>
+</html>

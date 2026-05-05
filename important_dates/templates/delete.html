@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Delete Date – Important Dates</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Delete Important Date</h1>
+            <a href="{{ url_for('index') }}" class="btn btn-secondary">Back</a>
+        </header>
+
+        <div class="form-card confirm-card">
+            <div class="confirm-icon">&#9888;</div>
+            <h2>Are you sure?</h2>
+            <p>You are about to permanently delete this entry:</p>
+
+            <div class="confirm-details">
+                <div class="detail-row">
+                    <span class="detail-label">Title</span>
+                    <span class="detail-value">{{ row.title }}</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">Date</span>
+                    <span class="detail-value">{{ row.date }}</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">Category</span>
+                    <span class="detail-value">
+                        <span class="badge badge-{{ row.category }}">{{ row.category|capitalize }}</span>
+                    </span>
+                </div>
+                {% if row.notes %}
+                <div class="detail-row">
+                    <span class="detail-label">Notes</span>
+                    <span class="detail-value">{{ row.notes }}</span>
+                </div>
+                {% endif %}
+            </div>
+
+            <form method="POST" action="{{ url_for('delete', item_id=row.id) }}">
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-danger">Yes, Delete</button>
+                    <a href="{{ url_for('index') }}" class="btn btn-secondary">Cancel</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

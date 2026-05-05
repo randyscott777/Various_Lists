@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Delete Password</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<header class="app-header">
+    <span class="icon">🔐</span>
+    <h1>Password Manager</h1>
+</header>
+
+<div class="container">
+    <div class="delete-card">
+        <h2>Delete Password?</h2>
+        <p>You are about to permanently delete the entry for:</p>
+        <div class="site-name">
+            {{ pw.site_name }}
+            <span class="badge cat-{{ pw.category }}" style="margin-left:8px;">{{ pw.category }}</span>
+        </div>
+        <p>Username: <strong style="color:#e0e0e0;">{{ pw.username }}</strong></p>
+        <p style="color:#ff8080; margin-top:12px; font-size:0.88rem;">This action cannot be undone.</p>
+
+        <div class="delete-actions" style="margin-top:24px;">
+            <form method="POST" action="{{ url_for('delete', id=pw.id) }}">
+                <input type="hidden" name="confirmed" value="yes">
+                <button type="submit" class="btn btn-danger">Yes, Delete</button>
+            </form>
+            <a href="{{ url_for('index') }}" class="btn btn-secondary">Cancel</a>
+        </div>
+    </div>
+</div>
+</body>
+</html>

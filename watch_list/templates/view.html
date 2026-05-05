@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% block title %}{{ item.title }} &mdash; Watch List{% endblock %}
+{% block content %}
+
+<section class="form-section">
+    <div class="form-card view-card">
+        <div class="view-header">
+            <div class="view-title-block">
+                <h2>{{ item.title }}</h2>
+                <span class="badge badge-type badge-{{ item.type | lower | replace(' ', '-') }}">{{ item.type }}</span>
+                <span class="badge badge-status badge-{{ item.status | lower | replace(' ', '-') }}">{{ item.status }}</span>
+            </div>
+            <div class="view-actions">
+                <a href="{{ url_for('edit', item_id=item.id) }}" class="btn btn-primary">Edit</a>
+                <a href="{{ url_for('delete', item_id=item.id) }}" class="btn btn-danger">Delete</a>
+                <a href="{{ url_for('index') }}" class="btn btn-secondary">Back</a>
+            </div>
+        </div>
+
+        <div class="view-grid">
+            <div class="view-field">
+                <span class="field-label">Genre</span>
+                <span class="field-value">{{ item.genre or '—' }}</span>
+            </div>
+            <div class="view-field">
+                <span class="field-label">Platform</span>
+                <span class="field-value">{{ item.platform or '—' }}</span>
+            </div>
+            <div class="view-field">
+                <span class="field-label">Year</span>
+                <span class="field-value">{{ item.year or '—' }}</span>
+            </div>
+            <div class="view-field">
+                <span class="field-label">Rating</span>
+                <span class="field-value col-rating">
+                    {% if item.rating %}
+                        {% for i in range(item.rating) %}&#9733;{% endfor %}{% for i in range(5 - item.rating) %}&#9734;{% endfor %}
+                        ({{ item.rating }}/5)
+                    {% else %}
+                        —
+                    {% endif %}
+                </span>
+            </div>
+            <div class="view-field">
+                <span class="field-label">Date Added</span>
+                <span class="field-value">{{ item.date_added }}</span>
+            </div>
+        </div>
+
+        {% if item.notes %}
+        <div class="view-notes">
+            <span class="field-label">Notes</span>
+            <p>{{ item.notes }}</p>
+        </div>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}

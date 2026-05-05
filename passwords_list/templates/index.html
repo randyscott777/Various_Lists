@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Password Manager</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<header class="app-header">
+    <span class="icon">🔐</span>
+    <h1>Password Manager</h1>
+    <div class="header-actions">
+        <a href="{{ url_for('add') }}" class="btn btn-primary">+ Add Password</a>
+    </div>
+</header>
+
+<div class="container">
+
+    <!-- Stats Bar -->
+    <div class="stats-bar">
+        <div class="stat-card">
+            <div class="stat-value">{{ total }}</div>
+            <div class="stat-label">
+                {% if filter_category %}{{ filter_category }}{% else %}Total{% endif %} Entries
+            </div>
+        </div>
+        {% if filter_category %}
+        <div class="stat-card" style="border-left-color:#e67e22;">
+            <div class="stat-value" style="font-size:1rem; padding-top:6px;">{{ filter_category }}</div>
+            <div class="stat-label">Active Filter</div>
+        </div>
+        {% endif %}
+    </div>
+
+    <!-- Filter / Sort Bar -->
+    <form method="POST" action="{{ url_for('index') }}">
+        <div class="filter-bar">
+            <label>Category</label>
+            <select name="filter_category">
+                <option value="">All Categories</option>
+                {% for cat in categories %}
+                <option value="{{ cat }}" {% if filter_category == cat %}selected{% endif %}>{{ cat }}</option>
+                {% endfor %}
+            </select>
+
+            <label>Sort By</label>
+            <select name="sort_field">
+                {% for field, label in sort_fields.items() %}
+                <option value="{{ field }}" {% if sort_field == field %}selected{% endif %}>{{ label }}</option>
+                {% endfor %}
+            </select>
+
+            <label>Order</label>
+            <select name="sort_direction">
+                <option value="ASC"  {% if sort_direction == 'ASC'  %}selected{% endif %}>A → Z</option>
+                <option value="DESC" {% if sort_direction == 'DESC' %}selected{% endif %}>Z → A</option>
+            </select>
+
+            <div class="filter-actions">
+                <button type="submit" class="btn btn-primary">Apply</button>
+                <button type="submit" name="filter_category" value="" class="btn btn-secondary">Clear</button>
+            </div>
+        </div>
+    </form>
+
+    <!-- Table -->
+    <div class="table-wrap">
+        {% if passwords %}
+        <table>
+            <thead>
+                <tr>
+                    <th>Site / Service</th>
+                    <th>URL</th>
+                    <th>Username</th>
+                    <th>Password</th>
+                    <th>Category</th>
+                    <th>Date Added</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for pw in passwords %}
+                <tr>
+                    <td><strong>{{ pw.site_name }}</strong></td>
+                    <td>
+                        {% if pw.url %}
+                        <span style="font-size:0.85rem; color:#7c9ef5;">{{ pw.url }}</span>
+                        {% else %}
+                        <span style="color:#5a6070;">—</span>
+                        {% endif %}
+                    </td>
+                    <td>{{ pw.username }}</td>
+                    <td><span class="pw-masked">••••••••</span></td>
+                    <td>
+                        <span class="badge cat-{{ pw.category }}">{{ pw.category }}</span>
+                    </td>
+                    <td style="font-size:0.83rem; color:#8a8f9a;">
+                        {{ pw.created_at[:10] if pw.created_at else '—' }}
+                    </td>
+                    <td>
+                        <div class="td-actions">
+                            <a href="{{ url_for('view', id=pw.id) }}"   class="btn btn-info"      style="padding:5px 10px; font-size:0.8rem;">View</a>
+                            <a href="{{ url_for('edit', id=pw.id) }}"   class="btn btn-secondary" style="padding:5px 10px; font-size:0.8rem;">Edit</a>
+                            <a href="{{ url_for('delete', id=pw.id) }}" class="btn btn-danger"    style="padding:5px 10px; font-size:0.8rem;">Delete</a>
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <div class="empty-state">
+            <div class="empty-icon">🔑</div>
+            <p>No passwords found. <a href="{{ url_for('add') }}">Add your first entry.</a></p>
+        </div>
+        {% endif %}
+    </div>
+
+</div>
+</body>
+</html>

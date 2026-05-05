@@ -1,0 +1,133 @@
+{% extends "base.html" %}
+{% block title %}Dashboard — Grocery List{% endblock %}
+
+{% block content %}
+<div class="dashboard">
+
+    <!-- Stats Bar -->
+    <section class="stats-bar">
+        <div class="stat">
+            <span class="stat-value">{{ total }}</span>
+            <span class="stat-label">Total Items</span>
+        </div>
+        <div class="stat">
+            <span class="stat-value">{{ needed }}</span>
+            <span class="stat-label">Still Needed</span>
+        </div>
+        <div class="stat">
+            <span class="stat-value">{{ bought }}</span>
+            <span class="stat-label">In Cart</span>
+        </div>
+    </section>
+
+    <!-- Filter & Sort Controls -->
+    <section class="controls">
+        <form method="get" action="{{ url_for('index') }}" class="filter-form">
+            <div class="control-group">
+                <label for="category">Category</label>
+                <select name="category" id="category" onchange="this.form.submit()">
+                    <option value="All" {% if filter_category == 'All' %}selected{% endif %}>All Categories</option>
+                    {% for cat in categories %}
+                    <option value="{{ cat }}" {% if filter_category == cat %}selected{% endif %}>{{ cat }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="control-group">
+                <label for="status">Status</label>
+                <select name="status" id="status" onchange="this.form.submit()">
+                    <option value="All" {% if filter_status == 'All' %}selected{% endif %}>All Items</option>
+                    <option value="Needed" {% if filter_status == 'Needed' %}selected{% endif %}>Still Needed</option>
+                    <option value="Bought" {% if filter_status == 'Bought' %}selected{% endif %}>In Cart</option>
+                </select>
+            </div>
+
+            <div class="control-group">
+                <label for="sort">Sort By</label>
+                <select name="sort" id="sort" onchange="this.form.submit()">
+                    <option value="created_at" {% if sort_by == 'created_at' %}selected{% endif %}>Date Added</option>
+                    <option value="name" {% if sort_by == 'name' %}selected{% endif %}>Name</option>
+                    <option value="category" {% if sort_by == 'category' %}selected{% endif %}>Category</option>
+                    <option value="is_bought" {% if sort_by == 'is_bought' %}selected{% endif %}>Status</option>
+                </select>
+            </div>
+
+            <div class="control-group">
+                <label for="dir">Order</label>
+                <select name="dir" id="dir" onchange="this.form.submit()">
+                    <option value="asc" {% if sort_dir == 'asc' %}selected{% endif %}>Ascending</option>
+                    <option value="desc" {% if sort_dir == 'desc' %}selected{% endif %}>Descending</option>
+                </select>
+            </div>
+
+            <!-- hidden fields to carry other params on submit -->
+            <noscript>
+                <button type="submit" class="btn btn-secondary">Apply</button>
+            </noscript>
+        </form>
+
+        {% if bought > 0 %}
+        <form method="post" action="{{ url_for('clear_bought') }}" class="clear-form">
+            <button type="submit" class="btn btn-danger">Clear Cart ({{ bought }})</button>
+        </form>
+        {% endif %}
+    </section>
+
+    <!-- Items List -->
+    <section class="items-section">
+        {% if items %}
+        <table class="items-table">
+            <thead>
+                <tr>
+                    <th class="col-check">Got It</th>
+                    <th class="col-name">Item</th>
+                    <th class="col-qty">Qty</th>
+                    <th class="col-cat">Category</th>
+                    <th class="col-notes">Notes</th>
+                    <th class="col-actions">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in items %}
+                <tr class="item-row {% if item.is_bought %}item-bought{% endif %}">
+                    <td class="col-check">
+                        <form method="post" action="{{ url_for('toggle', item_id=item.id) }}">
+                            <button type="submit" class="toggle-btn {% if item.is_bought %}toggle-on{% endif %}" title="Toggle bought">
+                                {% if item.is_bought %}&#10003;{% else %}&nbsp;{% endif %}
+                            </button>
+                        </form>
+                    </td>
+                    <td class="col-name">
+                        <span class="item-name {% if item.is_bought %}struck{% endif %}">{{ item.name }}</span>
+                    </td>
+                    <td class="col-qty">
+                        {% if item.quantity == item.quantity | int %}
+                            {{ item.quantity | int }}
+                        {% else %}
+                            {{ item.quantity }}
+                        {% endif %}
+                        {% if item.unit %} {{ item.unit }}{% endif %}
+                    </td>
+                    <td class="col-cat">
+                        <span class="badge badge-{{ item.category | lower | replace(' ', '-') }}">{{ item.category }}</span>
+                    </td>
+                    <td class="col-notes">{{ item.notes }}</td>
+                    <td class="col-actions">
+                        <a href="{{ url_for('edit', item_id=item.id) }}" class="btn btn-sm btn-edit">Edit</a>
+                        <a href="{{ url_for('delete_confirm', item_id=item.id) }}" class="btn btn-sm btn-delete">Delete</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <div class="empty-state">
+            <p class="empty-icon">🛒</p>
+            <p class="empty-msg">Your list is empty.</p>
+            <a href="{{ url_for('add') }}" class="btn btn-primary">Add Your First Item</a>
+        </div>
+        {% endif %}
+    </section>
+
+</div>
+{% endblock %}

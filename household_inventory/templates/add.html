@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+{% block title %}Add Item — Inventory{% endblock %}
+{% block content %}
+
+<div class="form-container">
+    <h2>Add New Item</h2>
+    <form method="post" action="{{ url_for('add') }}" class="item-form">
+
+        <div class="form-group">
+            <label for="name">Item Name <span class="required">*</span></label>
+            <input type="text" id="name" name="name" required placeholder="e.g. Samsung TV">
+        </div>
+
+        <div class="form-row">
+            <div class="form-group">
+                <label for="category">Category</label>
+                <input type="text" id="category" name="category" placeholder="e.g. Electronics">
+            </div>
+            <div class="form-group">
+                <label for="location">Location</label>
+                <input type="text" id="location" name="location" placeholder="e.g. Living Room">
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group">
+                <label for="quantity">Quantity</label>
+                <input type="number" id="quantity" name="quantity" min="1" value="1">
+            </div>
+            <div class="form-group">
+                <label for="condition">Condition</label>
+                <select id="condition" name="condition">
+                    <option value="">-- Select --</option>
+                    <option value="New">New</option>
+                    <option value="Good">Good</option>
+                    <option value="Fair">Fair</option>
+                    <option value="Poor">Poor</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group">
+                <label for="purchase_date">Purchase Date</label>
+                <input type="date" id="purchase_date" name="purchase_date">
+            </div>
+            <div class="form-group">
+                <label for="purchase_price">Purchase Price ($)</label>
+                <input type="number" id="purchase_price" name="purchase_price" min="0" step="0.01" placeholder="0.00">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="notes">Notes</label>
+            <textarea id="notes" name="notes" rows="3" placeholder="Optional notes..."></textarea>
+        </div>
+
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary">Save Item</button>
+            <a href="{{ url_for('index') }}" class="btn btn-secondary">Cancel</a>
+        </div>
+    </form>
+</div>
+
+{% endblock %}

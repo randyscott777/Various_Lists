@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block title %}{{ goal['title'] }} — Goals & Plans{% endblock %}
+
+{% block content %}
+<div class="detail-page">
+    <div class="detail-header">
+        <div class="detail-title-row">
+            <h1>{{ goal['title'] }}</h1>
+            <div class="detail-actions">
+                <a href="{{ url_for('edit', goal_id=goal['id']) }}" class="btn btn-edit">Edit</a>
+                <a href="{{ url_for('delete', goal_id=goal['id']) }}" class="btn btn-delete">Delete</a>
+            </div>
+        </div>
+        <a href="{{ url_for('index') }}" class="btn btn-back">Back to Dashboard</a>
+    </div>
+
+    <div class="detail-body">
+        <div class="detail-meta">
+            <div class="meta-item">
+                <span class="meta-label">Category</span>
+                <span class="badge badge-category">{{ goal['category'] }}</span>
+            </div>
+            <div class="meta-item">
+                <span class="meta-label">Priority</span>
+                <span class="badge badge-priority badge-{{ goal['priority'].lower() }}">{{ goal['priority'] }}</span>
+            </div>
+            <div class="meta-item">
+                <span class="meta-label">Status</span>
+                <span class="badge badge-status badge-{{ goal['status'].lower().replace(' ', '-') }}">{{ goal['status'] }}</span>
+            </div>
+            <div class="meta-item">
+                <span class="meta-label">Target Date</span>
+                <span class="meta-value">{{ goal['target_date'] or 'Not set' }}</span>
+            </div>
+            <div class="meta-item">
+                <span class="meta-label">Created</span>
+                <span class="meta-value">{{ goal['created_at'][:10] }}</span>
+            </div>
+            <div class="meta-item">
+                <span class="meta-label">Updated</span>
+                <span class="meta-value">{{ goal['updated_at'][:10] }}</span>
+            </div>
+        </div>
+
+        {% if goal['description'] %}
+        <div class="detail-description">
+            <h2>Description</h2>
+            <p>{{ goal['description'] }}</p>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

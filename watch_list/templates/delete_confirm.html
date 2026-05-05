@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block title %}Delete &mdash; {{ item.title }} &mdash; Watch List{% endblock %}
+{% block content %}
+
+<section class="form-section">
+    <div class="form-card confirm-card">
+        <div class="confirm-icon">&#9888;</div>
+        <h2>Delete Item?</h2>
+        <p class="confirm-message">
+            Are you sure you want to delete <strong>{{ item.title }}</strong>?<br>
+            This action cannot be undone.
+        </p>
+
+        <div class="confirm-detail">
+            <span class="badge badge-type badge-{{ item.type | lower | replace(' ', '-') }}">{{ item.type }}</span>
+            <span class="badge badge-status badge-{{ item.status | lower | replace(' ', '-') }}">{{ item.status }}</span>
+            {% if item.year %}<span class="detail-year">{{ item.year }}</span>{% endif %}
+        </div>
+
+        <form method="post" action="{{ url_for('delete', item_id=item.id) }}" class="confirm-form">
+            <div class="form-actions form-actions-center">
+                <button type="submit" class="btn btn-danger">Yes, Delete</button>
+                <a href="{{ url_for('view', item_id=item.id) }}" class="btn btn-secondary">Cancel</a>
+            </div>
+        </form>
+    </div>
+</section>
+{% endblock %}

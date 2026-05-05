@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+{% block title %}Add Bucket List Item{% endblock %}
+{% block content %}
+
+<div class="form-container">
+    <h2 class="form-title">&#9733; Add New Dream</h2>
+    <form method="POST" action="{{ url_for('add') }}">
+
+        <div class="form-group">
+            <label for="title">Title <span class="required">*</span></label>
+            <input type="text" id="title" name="title" required placeholder="What do you want to do?">
+        </div>
+
+        <div class="form-row">
+            <div class="form-group">
+                <label for="category">Category</label>
+                <select id="category" name="category">
+                    {% for cat in categories %}
+                    <option value="{{ cat }}" class="opt-category-{{ cat | lower }}">{{ cat }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="priority">Priority</label>
+                <select id="priority" name="priority">
+                    {% for p in priorities %}
+                    <option value="{{ p }}" class="opt-priority-{{ p | lower }}">{{ p }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="status">Status</label>
+                <select id="status" name="status">
+                    {% for s in statuses %}
+                    <option value="{{ s }}" class="opt-status-{{ s | replace(' ', '-') | lower }}">{{ s }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="description">Description</label>
+            <textarea id="description" name="description" rows="3" placeholder="Describe your dream..."></textarea>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group">
+                <label for="target_date">Target Date</label>
+                <input type="date" id="target_date" name="target_date">
+            </div>
+            <div class="form-group">
+                <label for="completed_date">Completed Date</label>
+                <input type="date" id="completed_date" name="completed_date">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="notes">Notes</label>
+            <textarea id="notes" name="notes" rows="2" placeholder="Any extra notes..."></textarea>
+        </div>
+
+        <div class="form-actions">
+            <button type="submit" class="btn-primary">Save Item</button>
+            <a href="{{ url_for('index') }}" class="btn-secondary">Cancel</a>
+        </div>
+
+    </form>
+</div>
+
+{% endblock %}

@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ image['title'] }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<div class="container">
+    <header>
+        <h1>{{ image['title'] }}</h1>
+        <a href="{{ url_for('index') }}" class="btn btn-back">Back to List</a>
+    </header>
+
+    <div class="view-card">
+        <div class="view-image">
+            {% if image['filename'] %}
+            <img src="{{ url_for('static', filename='uploads/' ~ image['filename']) }}" alt="{{ image['title'] }}">
+            {% else %}
+            <div class="no-image large">No Image Uploaded</div>
+            {% endif %}
+        </div>
+
+        <div class="view-details">
+            <table class="detail-table">
+                <tr>
+                    <th>ID</th>
+                    <td>{{ image['id'] }}</td>
+                </tr>
+                <tr>
+                    <th>Title</th>
+                    <td>{{ image['title'] }}</td>
+                </tr>
+                {% if image['filename'] %}
+                <tr>
+                    <th>File</th>
+                    <td>{{ image['filename'] }}</td>
+                </tr>
+                {% endif %}
+                <tr>
+                    <th>Category</th>
+                    <td>{{ image['category'] or '—' }}</td>
+                </tr>
+                <tr>
+                    <th>Tags</th>
+                    <td>
+                        {% if image['tags'] %}
+                        {% for tag in image['tags'].split(',') %}
+                        <span class="tag">{{ tag.strip() }}</span>
+                        {% endfor %}
+                        {% else %}
+                        —
+                        {% endif %}
+                    </td>
+                </tr>
+                <tr>
+                    <th>Description</th>
+                    <td>{{ image['description'] or '—' }}</td>
+                </tr>
+                <tr>
+                    <th>Date Added</th>
+                    <td>{{ image['date_added'] }}</td>
+                </tr>
+            </table>
+
+            <div class="view-actions">
+                <a href="{{ url_for('edit', image_id=image['id']) }}" class="btn btn-edit">Edit</a>
+                <a href="{{ url_for('delete', image_id=image['id']) }}" class="btn btn-delete">Delete</a>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

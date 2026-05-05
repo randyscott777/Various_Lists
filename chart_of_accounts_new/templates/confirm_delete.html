@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="confirm-page">
+  <div class="confirm-card">
+    <div class="confirm-header">
+      <h2>&#x1F5D1;&#xFE0F; Delete Account</h2>
+    </div>
+    <div class="confirm-body">
+      <p>Are you sure you want to permanently delete this account?</p>
+
+      <div class="confirm-item">
+        <div class="num">{{ account.account_number }}</div>
+        <div class="name">{{ account.account_name }}</div>
+        <div class="meta">{{ account.account_type }} &bull; {{ account.account_subtype }} &bull; {{ account.is_active }}</div>
+      </div>
+
+      <div class="confirm-actions">
+        <form method="POST" action="{{ url_for('delete_confirm', id=account.id) }}" style="display:inline;">
+          <button type="submit" class="btn-danger">&#x2714; Yes, Delete</button>
+        </form>
+        <a href="{{ url_for('index') }}" class="btn-cancel">&#x2715; Cancel</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+
+{% block title %}Family Tree{% endblock %}
+
+{% block content %}
+
+{% macro render_person(pid) %}
+{% set person = people[pid] %}
+<li>
+    <a href="{{ url_for('person_detail', pid=pid) }}">
+        <strong>{{ person.first_name }} {{ person.last_name }}</strong>
+    </a>
+    {% if person.gender %}<span class="badge bg-secondary ms-1">{{ person.gender }}</span>{% endif %}
+    {% if person.birth_date %}<small class="text-muted ms-1">b. {{ person.birth_date }}</small>{% endif %}
+    {% if person.death_date %}<small class="text-muted ms-1">d. {{ person.death_date }}</small>{% endif %}
+    {% if person.spouse_id and person.spouse_id in people %}
+        {% set sp = people[person.spouse_id] %}
+        <span class="text-muted mx-1">+</span>
+        <a class="spouse-link" href="{{ url_for('person_detail', pid=person.spouse_id) }}">
+            {{ sp.first_name }} {{ sp.last_name }}
+        </a>
+    {% endif %}
+    {% if person.children %}
+    <ul>
+        {% for child_id in person.children %}
+            {{ render_person(child_id) }}
+        {% endfor %}
+    </ul>
+    {% endif %}
+</li>
+{% endmacro %}
+
+<h2 class="mb-4">Family Tree</h2>
+
+{% if not people %}
+    <div class="alert alert-info">No family members yet. <a href="{{ url_for('person_add') }}">Add the first person.</a></div>
+{% else %}
+    <div class="tree">
+        <ul>
+        {% for root_id in roots %}
+            {{ render_person(root_id) }}
+        {% endfor %}
+        </ul>
+    </div>
+{% endif %}
+
+{% endblock %}

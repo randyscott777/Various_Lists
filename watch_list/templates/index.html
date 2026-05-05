@@ -1,0 +1,153 @@
+{% extends "base.html" %}
+{% block title %}Dashboard &mdash; Watch List{% endblock %}
+{% block content %}
+
+<section class="dashboard">
+
+    <!-- Summary Cards -->
+    <div class="summary-cards">
+        <div class="card card-total">
+            <div class="card-value">{{ counts.total }}</div>
+            <div class="card-label">Total</div>
+        </div>
+        <div class="card card-tv">
+            <div class="card-value">{{ counts.tv }}</div>
+            <div class="card-label">TV Shows</div>
+        </div>
+        <div class="card card-movie">
+            <div class="card-value">{{ counts.movie }}</div>
+            <div class="card-label">Movies</div>
+        </div>
+        <div class="card card-live">
+            <div class="card-value">{{ counts.live }}</div>
+            <div class="card-label">Live Events</div>
+        </div>
+        <div class="card card-want">
+            <div class="card-value">{{ counts.want }}</div>
+            <div class="card-label">Want to Watch</div>
+        </div>
+        <div class="card card-watching">
+            <div class="card-value">{{ counts.watching }}</div>
+            <div class="card-label">Watching</div>
+        </div>
+        <div class="card card-watched">
+            <div class="card-value">{{ counts.watched }}</div>
+            <div class="card-label">Watched</div>
+        </div>
+    </div>
+
+    <!-- Filter & Sort Bar -->
+    <div class="filter-bar">
+        <form method="get" action="{{ url_for('index') }}" class="filter-form">
+            <div class="filter-group">
+                <label for="filter_type">Type</label>
+                <select name="filter_type" id="filter_type">
+                    <option value="">All Types</option>
+                    <option value="TV Show" {% if filter_type == 'TV Show' %}selected{% endif %}>TV Show</option>
+                    <option value="Movie" {% if filter_type == 'Movie' %}selected{% endif %}>Movie</option>
+                    <option value="Live Event" {% if filter_type == 'Live Event' %}selected{% endif %}>Live Event</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <label for="filter_status">Status</label>
+                <select name="filter_status" id="filter_status">
+                    <option value="">All Statuses</option>
+                    <option value="Want to Watch" {% if filter_status == 'Want to Watch' %}selected{% endif %}>Want to Watch</option>
+                    <option value="Watching" {% if filter_status == 'Watching' %}selected{% endif %}>Watching</option>
+                    <option value="Watched" {% if filter_status == 'Watched' %}selected{% endif %}>Watched</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <label for="filter_genre">Genre</label>
+                <select name="filter_genre" id="filter_genre">
+                    <option value="">All Genres</option>
+                    {% for g in genres %}
+                    <option value="{{ g }}" {% if filter_genre == g %}selected{% endif %}>{{ g }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="filter-group">
+                <label for="sort_by">Sort By</label>
+                <select name="sort_by" id="sort_by">
+                    <option value="date_added" {% if sort_by == 'date_added' %}selected{% endif %}>Date Added</option>
+                    <option value="title" {% if sort_by == 'title' %}selected{% endif %}>Title</option>
+                    <option value="type" {% if sort_by == 'type' %}selected{% endif %}>Type</option>
+                    <option value="genre" {% if sort_by == 'genre' %}selected{% endif %}>Genre</option>
+                    <option value="platform" {% if sort_by == 'platform' %}selected{% endif %}>Platform</option>
+                    <option value="status" {% if sort_by == 'status' %}selected{% endif %}>Status</option>
+                    <option value="rating" {% if sort_by == 'rating' %}selected{% endif %}>Rating</option>
+                    <option value="year" {% if sort_by == 'year' %}selected{% endif %}>Year</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <label for="sort_dir">Order</label>
+                <select name="sort_dir" id="sort_dir">
+                    <option value="asc" {% if sort_dir == 'asc' %}selected{% endif %}>Ascending</option>
+                    <option value="desc" {% if sort_dir == 'desc' %}selected{% endif %}>Descending</option>
+                </select>
+            </div>
+            <div class="filter-group filter-actions">
+                <button type="submit" class="btn btn-primary">Apply</button>
+                <a href="{{ url_for('index') }}" class="btn btn-secondary">Reset</a>
+            </div>
+        </form>
+    </div>
+
+    <!-- Items Table -->
+    <div class="table-wrapper">
+        {% if items %}
+        <table class="items-table">
+            <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>Type</th>
+                    <th>Genre</th>
+                    <th>Platform</th>
+                    <th>Year</th>
+                    <th>Status</th>
+                    <th>Rating</th>
+                    <th>Date Added</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in items %}
+                <tr>
+                    <td class="col-title">
+                        <a href="{{ url_for('view', item_id=item.id) }}">{{ item.title }}</a>
+                    </td>
+                    <td>
+                        <span class="badge badge-type badge-{{ item.type | lower | replace(' ', '-') }}">{{ item.type }}</span>
+                    </td>
+                    <td>{{ item.genre or '&mdash;' }}</td>
+                    <td>{{ item.platform or '&mdash;' }}</td>
+                    <td>{{ item.year or '&mdash;' }}</td>
+                    <td>
+                        <span class="badge badge-status badge-{{ item.status | lower | replace(' ', '-') }}">{{ item.status }}</span>
+                    </td>
+                    <td class="col-rating">
+                        {% if item.rating %}
+                            {% for i in range(item.rating) %}&#9733;{% endfor %}{% for i in range(5 - item.rating) %}&#9734;{% endfor %}
+                        {% else %}
+                            &mdash;
+                        {% endif %}
+                    </td>
+                    <td>{{ item.date_added }}</td>
+                    <td class="col-actions">
+                        <a href="{{ url_for('edit', item_id=item.id) }}" class="btn-sm btn-edit">Edit</a>
+                        <a href="{{ url_for('delete', item_id=item.id) }}" class="btn-sm btn-delete">Delete</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <div class="empty-state">
+            <div class="empty-icon">&#127916;</div>
+            <p>No items found. <a href="{{ url_for('add') }}">Add your first item</a>.</p>
+        </div>
+        {% endif %}
+    </div>
+
+</section>
+{% endblock %}

@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% block title %}Confirm Delete{% endblock %}
+{% block content %}
+
+<div class="confirm-container">
+    <div class="confirm-card">
+        <div class="confirm-icon">&#9888;</div>
+        <h2>Delete This Item?</h2>
+        <p class="confirm-message">Are you sure you want to delete:</p>
+        <div class="confirm-item-name">{{ item.title }}</div>
+        <p class="confirm-warning">This action cannot be undone.</p>
+        <form method="POST" action="{{ url_for('delete', item_id=item.id) }}">
+            <div class="confirm-actions">
+                <button type="submit" class="btn-delete-confirm">Yes, Delete</button>
+                <a href="{{ url_for('index') }}" class="btn-secondary">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+{% endblock %}

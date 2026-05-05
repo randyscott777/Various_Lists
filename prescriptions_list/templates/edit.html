@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block title %}Edit Prescription{% endblock %}
+{% block content %}
+<div class="form-container">
+    <h2>Edit Prescription</h2>
+    <form method="POST" action="{{ url_for('edit', id=item['id']) }}">
+        <div class="form-group">
+            <label for="medication_name">Medication Name *</label>
+            <input type="text" id="medication_name" name="medication_name" value="{{ item['medication_name'] }}" required>
+        </div>
+        <div class="form-group">
+            <label for="dosage">Dosage *</label>
+            <input type="text" id="dosage" name="dosage" value="{{ item['dosage'] }}" required>
+        </div>
+        <div class="form-group">
+            <label for="frequency">Frequency *</label>
+            <select id="frequency" name="frequency" required>
+                {% for f in frequencies %}
+                <option value="{{ f }}" {% if item['frequency'] == f %}selected{% endif %}>{{ f }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="prescribing_doctor">Prescribing Doctor</label>
+            <input type="text" id="prescribing_doctor" name="prescribing_doctor" value="{{ item['prescribing_doctor'] or '' }}">
+        </div>
+        <div class="form-group">
+            <label for="pharmacy">Pharmacy</label>
+            <input type="text" id="pharmacy" name="pharmacy" value="{{ item['pharmacy'] or '' }}">
+        </div>
+        <div class="form-group">
+            <label for="refill_date">Refill Date</label>
+            <input type="date" id="refill_date" name="refill_date" value="{{ item['refill_date'] or '' }}">
+        </div>
+        <div class="form-group">
+            <label for="status">Status *</label>
+            <select id="status" name="status" required>
+                {% for s in statuses %}
+                <option value="{{ s }}" {% if item['status'] == s %}selected{% endif %}>{{ s }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="notes">Notes</label>
+            <textarea id="notes" name="notes" rows="3">{{ item['notes'] or '' }}</textarea>
+        </div>
+        <div class="form-actions">
+            <button type="submit" class="btn-save">Save Changes</button>
+            <a href="{{ url_for('index') }}" class="btn-cancel">Cancel</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

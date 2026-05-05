@@ -1,0 +1,362 @@
+/* ── Reset & Base ── */
+*, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    font-size: 15px;
+    background: #f0f2f5;
+    color: #1a1a2e;
+    min-height: 100vh;
+}
+
+/* ── Header ── */
+header {
+    background: #1a1a2e;
+    color: #fff;
+    padding: 1rem 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.25);
+}
+
+header h1 {
+    font-size: 1.4rem;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+}
+
+/* ── Main Layout ── */
+main {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 1.5rem 1.5rem 3rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+/* ── Summary Cards ── */
+.summary {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+}
+
+.card {
+    border-radius: 10px;
+    padding: 1.2rem 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+}
+
+.card-label {
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    opacity: 0.75;
+}
+
+.card-amount {
+    font-size: 1.8rem;
+    font-weight: 700;
+}
+
+.card-income   { background: #e6f4ea; color: #1e6e3e; }
+.card-expense  { background: #fdecea; color: #b71c1c; }
+.card-positive { background: #e8f0fe; color: #1a56b0; }
+.card-negative { background: #fff3e0; color: #bf5000; }
+
+/* ── Filter Section ── */
+.filter-section {
+    background: #fff;
+    border-radius: 10px;
+    padding: 1.2rem 1.5rem;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+}
+
+.filter-form {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    align-items: flex-end;
+}
+
+.filter-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+    min-width: 140px;
+}
+
+.filter-group label {
+    font-size: 0.78rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: #555;
+}
+
+.filter-group select,
+.filter-group input[type="date"] {
+    padding: 0.45rem 0.7rem;
+    border: 1px solid #d0d5dd;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    background: #fafafa;
+    color: #1a1a2e;
+}
+
+.filter-group select:focus,
+.filter-group input:focus {
+    outline: none;
+    border-color: #1a56b0;
+    background: #fff;
+}
+
+.filter-actions {
+    display: flex;
+    gap: 0.5rem;
+    align-items: flex-end;
+}
+
+/* ── Table Section ── */
+.table-section {
+    background: #fff;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+thead th {
+    background: #1a1a2e;
+    color: #fff;
+    padding: 0.75rem 1rem;
+    text-align: left;
+    font-size: 0.78rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+tbody tr {
+    border-bottom: 1px solid #f0f0f0;
+}
+
+tbody tr:hover {
+    background: #f8f9ff;
+}
+
+tbody td {
+    padding: 0.65rem 1rem;
+    font-size: 0.9rem;
+    color: #333;
+}
+
+/* Category group header row */
+tr.category-row td {
+    background: #e8f0fe;
+    color: #1a56b0;
+    font-weight: 700;
+    font-size: 0.82rem;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    padding: 0.5rem 1rem;
+    border-top: 2px solid #c3d5f5;
+}
+
+.amount-income  { color: #1e6e3e; font-weight: 600; }
+.amount-expense { color: #b71c1c; font-weight: 600; }
+
+/* ── Badges ── */
+.badge {
+    display: inline-block;
+    padding: 0.2rem 0.55rem;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: capitalize;
+}
+
+.badge-income  { background: #e6f4ea; color: #1e6e3e; }
+.badge-expense { background: #fdecea; color: #b71c1c; }
+
+/* ── Actions column ── */
+.actions {
+    display: flex;
+    gap: 0.4rem;
+}
+
+/* ── Empty state ── */
+.empty-msg {
+    padding: 2rem;
+    text-align: center;
+    color: #888;
+    font-size: 0.95rem;
+}
+
+.empty-msg a {
+    color: #1a56b0;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+/* ── Form Section ── */
+.form-section {
+    background: #fff;
+    border-radius: 10px;
+    padding: 2rem;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+    max-width: 600px;
+}
+
+.item-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.1rem;
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+}
+
+.form-group label {
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: #444;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+    padding: 0.55rem 0.8rem;
+    border: 1px solid #d0d5dd;
+    border-radius: 6px;
+    font-size: 0.95rem;
+    background: #fafafa;
+    color: #1a1a2e;
+    font-family: inherit;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+    outline: none;
+    border-color: #1a56b0;
+    background: #fff;
+    box-shadow: 0 0 0 3px rgba(26,86,176,0.1);
+}
+
+.form-group textarea {
+    resize: vertical;
+}
+
+.required { color: #b71c1c; }
+
+.form-actions {
+    display: flex;
+    gap: 0.75rem;
+    margin-top: 0.5rem;
+}
+
+/* ── Confirm Delete ── */
+.confirm-section {
+    display: flex;
+    justify-content: center;
+}
+
+.confirm-box {
+    background: #fff;
+    border-radius: 10px;
+    padding: 2rem;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+    max-width: 480px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+}
+
+.confirm-msg {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #b71c1c;
+    text-align: center;
+}
+
+.confirm-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9rem;
+}
+
+.confirm-table th,
+.confirm-table td {
+    padding: 0.5rem 0.75rem;
+    border-bottom: 1px solid #f0f0f0;
+    text-align: left;
+}
+
+.confirm-table th {
+    color: #666;
+    font-weight: 600;
+    width: 35%;
+}
+
+.confirm-actions {
+    display: flex;
+    gap: 0.75rem;
+    justify-content: center;
+}
+
+/* ── Buttons ── */
+.btn {
+    display: inline-block;
+    padding: 0.5rem 1.1rem;
+    border-radius: 6px;
+    font-size: 0.88rem;
+    font-weight: 600;
+    text-decoration: none;
+    cursor: pointer;
+    border: none;
+    transition: opacity 0.15s, box-shadow 0.15s;
+    white-space: nowrap;
+}
+
+.btn:hover { opacity: 0.88; }
+
+.btn-primary   { background: #1a56b0; color: #fff; }
+.btn-secondary { background: #1a1a2e; color: #fff; }
+.btn-ghost     { background: transparent; color: #555; border: 1px solid #ccc; }
+.btn-edit      { background: #e8f0fe; color: #1a56b0; }
+.btn-delete    { background: #fdecea; color: #b71c1c; }
+
+.btn-sm {
+    padding: 0.28rem 0.65rem;
+    font-size: 0.78rem;
+}

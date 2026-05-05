@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Important Dates</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Important Dates</h1>
+            <a href="{{ url_for('add') }}" class="btn btn-primary">+ Add Date</a>
+        </header>
+
+        <section class="filter-panel">
+            <form method="POST" action="{{ url_for('index') }}">
+                <div class="filter-row">
+                    <div class="filter-group">
+                        <label for="filter_category">Category</label>
+                        <select name="filter_category" id="filter_category">
+                            <option value="">All Categories</option>
+                            {% for cat in categories %}
+                            <option value="{{ cat }}" {% if filter_category == cat %}selected{% endif %}>
+                                {{ cat|capitalize }}
+                            </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="filter-group">
+                        <label for="filter_month">Month</label>
+                        <select name="filter_month" id="filter_month">
+                            <option value="">All Months</option>
+                            {% for num, name in months %}
+                            <option value="{{ num }}" {% if filter_month == num %}selected{% endif %}>
+                                {{ name }}
+                            </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="filter-group">
+                        <label for="sort_field">Sort By</label>
+                        <select name="sort_field" id="sort_field">
+                            <option value="date" {% if sort_field == 'date' %}selected{% endif %}>Date</option>
+                            <option value="title" {% if sort_field == 'title' %}selected{% endif %}>Title</option>
+                            <option value="category" {% if sort_field == 'category' %}selected{% endif %}>Category</option>
+                        </select>
+                    </div>
+
+                    <div class="filter-group">
+                        <label for="sort_dir">Order</label>
+                        <select name="sort_dir" id="sort_dir">
+                            <option value="asc" {% if sort_dir == 'asc' %}selected{% endif %}>Ascending</option>
+                            <option value="desc" {% if sort_dir == 'desc' %}selected{% endif %}>Descending</option>
+                        </select>
+                    </div>
+
+                    <div class="filter-group filter-actions">
+                        <label>&nbsp;</label>
+                        <button type="submit" class="btn btn-secondary">Apply</button>
+                    </div>
+
+                    <div class="filter-group filter-actions">
+                        <label>&nbsp;</label>
+                        <a href="{{ url_for('index') }}" class="btn btn-reset"
+                           onclick="document.cookie='session=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/';">
+                            Reset
+                        </a>
+                    </div>
+                </div>
+            </form>
+        </section>
+
+        <section class="summary-bar">
+            <span class="summary-count">{{ rows|length }} item{% if rows|length != 1 %}s{% endif %}</span>
+            {% if filter_category %}
+            <span class="badge badge-{{ filter_category }}">{{ filter_category|capitalize }}</span>
+            {% endif %}
+            {% if filter_month %}
+            {% for num, name in months %}{% if num == filter_month %}<span class="badge">{{ name }}</span>{% endif %}{% endfor %}
+            {% endif %}
+        </section>
+
+        {% if rows %}
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>Date</th>
+                    <th>Category</th>
+                    <th>Notes</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for row in rows %}
+                <tr>
+                    <td class="col-title">{{ row.title }}</td>
+                    <td class="col-date">{{ row.date }}</td>
+                    <td class="col-category">
+                        <span class="badge badge-{{ row.category }}">{{ row.category|capitalize }}</span>
+                    </td>
+                    <td class="col-notes">{{ row.notes or '—' }}</td>
+                    <td class="col-actions">
+                        <a href="{{ url_for('edit', item_id=row.id) }}" class="btn btn-sm btn-edit">Edit</a>
+                        <a href="{{ url_for('delete', item_id=row.id) }}" class="btn btn-sm btn-delete">Delete</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <div class="empty-state">
+            <p>No dates found.</p>
+            <a href="{{ url_for('add') }}" class="btn btn-primary">Add your first date</a>
+        </div>
+        {% endif %}
+    </div>
+</body>
+</html>

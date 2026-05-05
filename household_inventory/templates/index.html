@@ -1,0 +1,121 @@
+{% extends "base.html" %}
+{% block title %}Dashboard — Inventory{% endblock %}
+{% block content %}
+
+<section class="dashboard-summary">
+    <div class="stat-card">
+        <span class="stat-number">{{ total }}</span>
+        <span class="stat-label">Total Items</span>
+    </div>
+    <div class="stat-card">
+        <span class="stat-number">{{ items | length }}</span>
+        <span class="stat-label">Showing</span>
+    </div>
+    <div class="stat-card">
+        <span class="stat-number">{{ categories | length }}</span>
+        <span class="stat-label">Categories</span>
+    </div>
+    <div class="stat-card">
+        <span class="stat-number">{{ locations | length }}</span>
+        <span class="stat-label">Locations</span>
+    </div>
+</section>
+
+<section class="filter-bar">
+    <form method="get" action="{{ url_for('index') }}" class="filter-form">
+        <div class="filter-group">
+            <label for="category">Category</label>
+            <select name="category" id="category">
+                <option value="">All</option>
+                {% for c in categories %}
+                <option value="{{ c }}" {% if filter_category == c %}selected{% endif %}>{{ c }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="filter-group">
+            <label for="location">Location</label>
+            <select name="location" id="location">
+                <option value="">All</option>
+                {% for l in locations %}
+                <option value="{{ l }}" {% if filter_location == l %}selected{% endif %}>{{ l }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="filter-group">
+            <label for="condition">Condition</label>
+            <select name="condition" id="condition">
+                <option value="">All</option>
+                {% for c in conditions %}
+                <option value="{{ c }}" {% if filter_condition == c %}selected{% endif %}>{{ c }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="filter-group">
+            <label for="sort_by">Sort By</label>
+            <select name="sort_by" id="sort_by">
+                {% for field in sort_fields %}
+                <option value="{{ field }}" {% if sort_by == field %}selected{% endif %}>{{ field | capitalize }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="filter-group">
+            <label for="sort_dir">Order</label>
+            <select name="sort_dir" id="sort_dir">
+                <option value="asc" {% if sort_dir == 'asc' %}selected{% endif %}>Ascending</option>
+                <option value="desc" {% if sort_dir == 'desc' %}selected{% endif %}>Descending</option>
+            </select>
+        </div>
+        <div class="filter-actions">
+            <button type="submit" class="btn btn-primary">Apply</button>
+            <a href="{{ url_for('index') }}" class="btn btn-secondary">Reset</a>
+        </div>
+    </form>
+</section>
+
+<section class="item-list">
+    {% if items %}
+    <table>
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Category</th>
+                <th>Location</th>
+                <th>Qty</th>
+                <th>Condition</th>
+                <th>Purchase Date</th>
+                <th>Price</th>
+                <th>Notes</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in items %}
+            <tr>
+                <td>{{ item.name }}</td>
+                <td><span class="badge">{{ item.category or '—' }}</span></td>
+                <td>{{ item.location or '—' }}</td>
+                <td>{{ item.quantity }}</td>
+                <td>
+                    <span class="condition condition-{{ (item.condition or 'unknown') | lower | replace(' ', '-') }}">
+                        {{ item.condition or '—' }}
+                    </span>
+                </td>
+                <td>{{ item.purchase_date or '—' }}</td>
+                <td>{% if item.purchase_price is not none %}${{ '%.2f' % item.purchase_price }}{% else %}—{% endif %}</td>
+                <td class="notes-cell">{{ item.notes or '' }}</td>
+                <td class="actions">
+                    <a href="{{ url_for('edit', item_id=item.id) }}" class="btn btn-edit">Edit</a>
+                    <a href="{{ url_for('delete', item_id=item.id) }}" class="btn btn-delete">Delete</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <div class="empty-state">
+        <p>No items found. <a href="{{ url_for('add') }}">Add your first item.</a></p>
+    </div>
+    {% endif %}
+</section>
+
+{% endblock %}

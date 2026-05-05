@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% block title %}Delete Contact{% endblock %}
+{% block content %}
+
+<div class="form-page">
+    <div class="confirm-box">
+        <div class="confirm-icon">&#9888;</div>
+        <h2>Delete Contact?</h2>
+        <p>Are you sure you want to permanently delete:</p>
+        <p class="confirm-name">{{ contact.first_name }} {{ contact.last_name }}
+            {% if contact.company %}<span class="confirm-company">({{ contact.company }})</span>{% endif %}
+        </p>
+        <p class="confirm-warning">This action cannot be undone.</p>
+
+        <form method="POST" action="{{ url_for('delete', contact_id=contact.id) }}">
+            <div class="confirm-actions">
+                <button type="submit" class="btn-delete-confirm">Yes, Delete</button>
+                <a href="{{ url_for('view', contact_id=contact.id) }}" class="btn-cancel">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+{% endblock %}

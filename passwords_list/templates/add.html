@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Password</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<header class="app-header">
+    <span class="icon">🔐</span>
+    <h1>Password Manager</h1>
+</header>
+
+<div class="container">
+    <div class="breadcrumb">
+        <a href="{{ url_for('index') }}">Dashboard</a>
+        <span>›</span> Add Password
+    </div>
+
+    <div class="form-card">
+        <h2>Add New Password</h2>
+
+        {% if errors %}
+        <ul class="error-list">
+            {% for e in errors %}<li>{{ e }}</li>{% endfor %}
+        </ul>
+        {% endif %}
+
+        <form method="POST" action="{{ url_for('add') }}">
+            <div class="form-group">
+                <label>Site / Service Name *</label>
+                <input type="text" name="site_name" value="{{ form.get('site_name', '') }}" placeholder="e.g. Google, Netflix" required>
+            </div>
+            <div class="form-group">
+                <label>URL</label>
+                <input type="text" name="url" value="{{ form.get('url', '') }}" placeholder="e.g. https://google.com">
+            </div>
+            <div class="form-group">
+                <label>Username / Email *</label>
+                <input type="text" name="username" value="{{ form.get('username', '') }}" placeholder="e.g. user@example.com" required>
+            </div>
+            <div class="form-group">
+                <label>Password *</label>
+                <input type="text" name="password" value="{{ form.get('password', '') }}" placeholder="Enter password" required>
+            </div>
+            <div class="form-group">
+                <label>Category</label>
+                <select name="category">
+                    {% for cat in categories %}
+                    <option value="{{ cat }}" {% if form.get('category', 'Personal') == cat %}selected{% endif %}>{{ cat }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Notes</label>
+                <textarea name="notes" placeholder="Optional notes...">{{ form.get('notes', '') }}</textarea>
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary">Save Password</button>
+                <a href="{{ url_for('index') }}" class="btn btn-secondary">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Confirm Delete</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<div class="container">
+    <header>
+        <h1>Confirm Delete</h1>
+        <a href="{{ url_for('index') }}" class="btn btn-back">Back to List</a>
+    </header>
+
+    <div class="confirm-card">
+        <div class="confirm-warning">
+            <span class="warn-icon">!</span>
+            <h2>Are you sure you want to delete this image?</h2>
+            <p>This action cannot be undone. The image file will also be permanently removed.</p>
+        </div>
+
+        <div class="confirm-details">
+            {% if image['filename'] %}
+            <div class="confirm-image">
+                <img src="{{ url_for('static', filename='uploads/' ~ image['filename']) }}" alt="{{ image['title'] }}">
+            </div>
+            {% endif %}
+            <table class="detail-table">
+                <tr>
+                    <th>Title</th>
+                    <td>{{ image['title'] }}</td>
+                </tr>
+                {% if image['category'] %}
+                <tr>
+                    <th>Category</th>
+                    <td>{{ image['category'] }}</td>
+                </tr>
+                {% endif %}
+                {% if image['filename'] %}
+                <tr>
+                    <th>File</th>
+                    <td>{{ image['filename'] }}</td>
+                </tr>
+                {% endif %}
+                <tr>
+                    <th>Date Added</th>
+                    <td>{{ image['date_added'] }}</td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="confirm-actions">
+            <form method="POST">
+                <button type="submit" class="btn btn-delete">Yes, Delete</button>
+                <a href="{{ url_for('index') }}" class="btn btn-cancel">Cancel</a>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+</html>

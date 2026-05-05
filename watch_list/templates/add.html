@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+{% block title %}Add Item &mdash; Watch List{% endblock %}
+{% block content %}
+
+<section class="form-section">
+    <div class="form-card">
+        <h2>Add New Item</h2>
+
+        <form method="post" action="{{ url_for('add') }}" class="item-form">
+            <div class="form-row">
+                <div class="form-group form-group-lg">
+                    <label for="title">Title <span class="required">*</span></label>
+                    <input type="text" id="title" name="title" required placeholder="Enter title...">
+                </div>
+                <div class="form-group">
+                    <label for="type">Type <span class="required">*</span></label>
+                    <select id="type" name="type" required>
+                        <option value="">-- Select --</option>
+                        <option value="TV Show">TV Show</option>
+                        <option value="Movie">Movie</option>
+                        <option value="Live Event">Live Event</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="genre">Genre</label>
+                    <input type="text" id="genre" name="genre" placeholder="e.g. Drama, Comedy, Action...">
+                </div>
+                <div class="form-group">
+                    <label for="platform">Platform</label>
+                    <input type="text" id="platform" name="platform" placeholder="e.g. Netflix, HBO, Theater...">
+                </div>
+                <div class="form-group">
+                    <label for="year">Year</label>
+                    <input type="number" id="year" name="year" min="1900" max="2100" placeholder="e.g. 2024">
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="status">Status</label>
+                    <select id="status" name="status">
+                        <option value="Want to Watch">Want to Watch</option>
+                        <option value="Watching">Watching</option>
+                        <option value="Watched">Watched</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="rating">Rating</label>
+                    <select id="rating" name="rating">
+                        <option value="">No Rating</option>
+                        <option value="1">&#9733; 1</option>
+                        <option value="2">&#9733;&#9733; 2</option>
+                        <option value="3">&#9733;&#9733;&#9733; 3</option>
+                        <option value="4">&#9733;&#9733;&#9733;&#9733; 4</option>
+                        <option value="5">&#9733;&#9733;&#9733;&#9733;&#9733; 5</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="notes">Notes</label>
+                <textarea id="notes" name="notes" rows="3" placeholder="Optional notes..."></textarea>
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary">Add to Watch List</button>
+                <a href="{{ url_for('index') }}" class="btn btn-secondary">Cancel</a>
+            </div>
+        </form>
+    </div>
+</section>
+{% endblock %}

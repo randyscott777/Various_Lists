@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+{% block title %}Edit Goal — Goals & Plans{% endblock %}
+
+{% block content %}
+<div class="form-page">
+    <div class="form-header">
+        <h1>Edit Goal</h1>
+        <a href="{{ url_for('detail', goal_id=goal['id']) }}" class="btn btn-back">Back</a>
+    </div>
+
+    <form method="post" class="goal-form">
+        <div class="form-group">
+            <label for="title">Title <span class="required">*</span></label>
+            <input type="text" id="title" name="title" required value="{{ goal['title'] }}">
+        </div>
+
+        <div class="form-group">
+            <label for="description">Description</label>
+            <textarea id="description" name="description" rows="4">{{ goal['description'] or '' }}</textarea>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group">
+                <label for="category">Category</label>
+                <select id="category" name="category">
+                    {% for c in categories %}
+                    <option value="{{ c }}" {% if goal['category'] == c %}selected{% endif %}>{{ c }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="priority">Priority</label>
+                <select id="priority" name="priority">
+                    {% for p in priorities %}
+                    <option value="{{ p }}" {% if goal['priority'] == p %}selected{% endif %}>{{ p }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="status">Status</label>
+                <select id="status" name="status">
+                    {% for s in statuses %}
+                    <option value="{{ s }}" {% if goal['status'] == s %}selected{% endif %}>{{ s }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+
+        <div class="form-group form-group-half">
+            <label for="target_date">Target Date</label>
+            <input type="date" id="target_date" name="target_date" value="{{ goal['target_date'] or '' }}">
+        </div>
+
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary">Update Goal</button>
+            <a href="{{ url_for('detail', goal_id=goal['id']) }}" class="btn btn-secondary">Cancel</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% block title %}Edit Travel Plan{% endblock %}
+
+{% block content %}
+<div class="form-card">
+    <h2>&#9999; Edit Trip — {{ plan.destination }}</h2>
+    <form method="post" action="{{ url_for('edit', plan_id=plan.id) }}">
+        <div class="form-row">
+            <div class="form-group full">
+                <label for="destination">Destination *</label>
+                <input type="text" id="destination" name="destination" required value="{{ plan.destination }}">
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group">
+                <label for="start_date">Start Date</label>
+                <input type="date" id="start_date" name="start_date" value="{{ plan.start_date or '' }}">
+            </div>
+            <div class="form-group">
+                <label for="end_date">End Date</label>
+                <input type="date" id="end_date" name="end_date" value="{{ plan.end_date or '' }}">
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group">
+                <label for="travelers">Number of Travelers</label>
+                <input type="number" id="travelers" name="travelers" value="{{ plan.travelers }}" min="1">
+            </div>
+            <div class="form-group">
+                <label for="status">Status</label>
+                <select id="status" name="status">
+                    {% for s in status_options %}
+                    <option value="{{ s }}" {% if plan.status == s %}selected{% endif %}>{{ s }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group full">
+                <label for="budget">Estimated Budget ($)</label>
+                <input type="number" id="budget" name="budget" value="{{ plan.budget or 0.00 }}" min="0" step="0.01">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="notes">Notes</label>
+            <textarea id="notes" name="notes">{{ plan.notes or '' }}</textarea>
+        </div>
+        <div class="form-actions">
+            <button type="submit" class="btn btn-warning">Save Changes</button>
+            <a href="{{ url_for('index') }}" class="btn btn-secondary">Cancel</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

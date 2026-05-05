@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ title }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<div class="header">
+    <h1>Projects App</h1>
+    <span class="breadcrumb">
+        <a href="{{ url_for('index') }}">Dashboard</a>
+        <span>&rsaquo;</span>
+        <a href="{{ url_for('tasks', project_id=project['id']) }}">{{ project['name'] }}</a>
+        <span>&rsaquo;</span> {{ title }}
+    </span>
+</div>
+<div class="container">
+    <div class="form-card">
+        <h2>{{ title }}</h2>
+        <form method="POST">
+            <div class="form-group">
+                <label>Task Name *</label>
+                <input type="text" name="name" value="{{ task['name'] if task else '' }}" required>
+            </div>
+            <div class="form-group">
+                <label>Description</label>
+                <textarea name="description">{{ task['description'] if task else '' }}</textarea>
+            </div>
+            <div class="form-group">
+                <label>Status</label>
+                <select name="status">
+                    {% for s in status_options %}
+                    <option value="{{ s }}" {% if task and task['status'] == s %}selected{% elif not task and s == 'Not Started' %}selected{% endif %}>{{ s }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Priority</label>
+                <select name="priority">
+                    {% for p in priority_options %}
+                    <option value="{{ p }}" {% if task and task['priority'] == p %}selected{% elif not task and p == 'Medium' %}selected{% endif %}>{{ p }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Due Date</label>
+                <input type="date" name="due_date" value="{{ task['due_date'] if task and task['due_date'] else '' }}">
+            </div>
+            <div class="form-actions">
+                <button type="submit" class="btn btn-success">Save Task</button>
+                <a href="{{ url_for('tasks', project_id=project['id']) }}" class="btn btn-secondary">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+</body>
+</html>

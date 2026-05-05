@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Images List</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<div class="container">
+    <header>
+        <h1>Images List</h1>
+        <div class="header-actions">
+            <a href="{{ url_for('add') }}" class="btn btn-primary">+ Add Image</a>
+        </div>
+    </header>
+
+    <!-- Dashboard Stats -->
+    <div class="stats-bar">
+        <span class="stat"><strong>{{ total }}</strong> Total Images</span>
+        {% if filter_category or filter_tags %}
+        <span class="stat filtered">Filtered: <strong>{{ images|length }}</strong> shown</span>
+        {% endif %}
+    </div>
+
+    <!-- Filter & Sort Form -->
+    <form method="GET" action="{{ url_for('index') }}" class="filter-form">
+        <div class="filter-row">
+            <div class="filter-group">
+                <label for="filter_category">Category</label>
+                <select name="filter_category" id="filter_category">
+                    <option value="">-- All Categories --</option>
+                    {% for cat in categories %}
+                    <option value="{{ cat }}" {% if filter_category == cat %}selected{% endif %}>{{ cat }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="filter-group">
+                <label for="filter_tags">Tags</label>
+                <input type="text" name="filter_tags" id="filter_tags" value="{{ filter_tags }}" placeholder="Search tags...">
+            </div>
+            <div class="filter-group">
+                <label for="sort_by">Sort By</label>
+                <select name="sort_by" id="sort_by">
+                    <option value="date_added" {% if sort_by == 'date_added' %}selected{% endif %}>Date Added</option>
+                    <option value="title" {% if sort_by == 'title' %}selected{% endif %}>Title</option>
+                    <option value="category" {% if sort_by == 'category' %}selected{% endif %}>Category</option>
+                    <option value="tags" {% if sort_by == 'tags' %}selected{% endif %}>Tags</option>
+                    <option value="id" {% if sort_by == 'id' %}selected{% endif %}>ID</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <label for="sort_dir">Order</label>
+                <select name="sort_dir" id="sort_dir">
+                    <option value="ASC" {% if sort_dir == 'ASC' %}selected{% endif %}>Ascending</option>
+                    <option value="DESC" {% if sort_dir == 'DESC' %}selected{% endif %}>Descending</option>
+                </select>
+            </div>
+            <div class="filter-actions">
+                <button type="submit" class="btn btn-filter">Apply</button>
+                <a href="{{ url_for('index', reset=1) }}" class="btn btn-reset">Reset</a>
+            </div>
+        </div>
+    </form>
+
+    <!-- Image Grid -->
+    {% if images %}
+    <div class="image-grid">
+        {% for img in images %}
+        <div class="image-card">
+            <div class="image-thumb">
+                {% if img['filename'] %}
+                <img src="{{ url_for('static', filename='uploads/' ~ img['filename']) }}" alt="{{ img['title'] }}">
+                {% else %}
+                <div class="no-image">No Image</div>
+                {% endif %}
+            </div>
+            <div class="image-info">
+                <h3 class="image-title">{{ img['title'] }}</h3>
+                {% if img['category'] %}
+                <span class="badge badge-category">{{ img['category'] }}</span>
+                {% endif %}
+                {% if img['tags'] %}
+                <div class="tags">
+                    {% for tag in img['tags'].split(',') %}
+                    <span class="tag">{{ tag.strip() }}</span>
+                    {% endfor %}
+                </div>
+                {% endif %}
+                {% if img['description'] %}
+                <p class="description">{{ img['description'][:80] }}{% if img['description']|length > 80 %}...{% endif %}</p>
+                {% endif %}
+                <div class="date-added">Added: {{ img['date_added'] }}</div>
+            </div>
+            <div class="card-actions">
+                <a href="{{ url_for('view', image_id=img['id']) }}" class="btn btn-sm btn-view">View</a>
+                <a href="{{ url_for('edit', image_id=img['id']) }}" class="btn btn-sm btn-edit">Edit</a>
+                <a href="{{ url_for('delete', image_id=img['id']) }}" class="btn btn-sm btn-delete">Delete</a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="empty-state">
+        <p>No images found. <a href="{{ url_for('add') }}">Add your first image.</a></p>
+    </div>
+    {% endif %}
+</div>
+</body>
+</html>

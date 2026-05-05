@@ -1,0 +1,524 @@
+/* ===== Reset & Base ===== */
+*, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    background: #f0f2f5;
+    color: #222;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+a {
+    color: #2563eb;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+/* ===== Header ===== */
+header {
+    background: #1e3a5f;
+    color: #fff;
+    padding: 0 2rem;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.25);
+}
+
+.header-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 60px;
+}
+
+header h1 {
+    font-size: 1.4rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+}
+
+header h1 a {
+    color: #fff;
+    text-decoration: none;
+}
+
+header nav {
+    display: flex;
+    align-items: center;
+    gap: 1.2rem;
+}
+
+header nav a {
+    color: #c7d9f0;
+    font-size: 0.95rem;
+    text-decoration: none;
+}
+
+header nav a:hover {
+    color: #fff;
+}
+
+/* ===== Main ===== */
+main {
+    flex: 1;
+    max-width: 1200px;
+    width: 100%;
+    margin: 2rem auto;
+    padding: 0 1.5rem;
+}
+
+/* ===== Footer ===== */
+footer {
+    text-align: center;
+    padding: 1rem;
+    color: #888;
+    font-size: 0.85rem;
+    background: #e4e7ec;
+    border-top: 1px solid #d1d5db;
+}
+
+/* ===== Buttons ===== */
+.btn-primary {
+    background: #2563eb;
+    color: #fff;
+    border: none;
+    padding: 0.5rem 1.2rem;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    font-weight: 600;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.btn-primary:hover {
+    background: #1d4ed8;
+    text-decoration: none;
+    color: #fff;
+}
+
+.btn-nav {
+    background: #16a34a;
+    color: #fff !important;
+    padding: 0.4rem 1rem;
+    border-radius: 5px;
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+.btn-nav:hover {
+    background: #15803d;
+    text-decoration: none !important;
+}
+
+.btn-edit {
+    background: #f59e0b;
+    color: #fff;
+    padding: 0.3rem 0.8rem;
+    border-radius: 4px;
+    font-size: 0.82rem;
+    font-weight: 600;
+}
+
+.btn-edit:hover {
+    background: #d97706;
+    text-decoration: none;
+    color: #fff;
+}
+
+.btn-delete {
+    background: #dc2626;
+    color: #fff;
+    padding: 0.3rem 0.8rem;
+    border-radius: 4px;
+    font-size: 0.82rem;
+    font-weight: 600;
+}
+
+.btn-delete:hover {
+    background: #b91c1c;
+    text-decoration: none;
+    color: #fff;
+}
+
+.btn-delete-confirm {
+    background: #dc2626;
+    color: #fff;
+    border: none;
+    padding: 0.6rem 1.5rem;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 0.95rem;
+    font-weight: 700;
+}
+
+.btn-delete-confirm:hover {
+    background: #b91c1c;
+}
+
+.btn-cancel {
+    background: #e5e7eb;
+    color: #374151;
+    padding: 0.6rem 1.2rem;
+    border-radius: 5px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.btn-cancel:hover {
+    background: #d1d5db;
+    text-decoration: none;
+    color: #111;
+}
+
+.btn-reset {
+    background: #e5e7eb;
+    color: #374151;
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+    font-size: 0.88rem;
+    font-weight: 600;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.btn-reset:hover {
+    background: #d1d5db;
+    text-decoration: none;
+}
+
+.btn-back {
+    display: inline-block;
+    margin-top: 1.5rem;
+    color: #2563eb;
+    font-size: 0.9rem;
+}
+
+/* ===== Dashboard ===== */
+.dashboard {
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+    padding: 1.5rem 2rem;
+}
+
+.dashboard-header {
+    margin-bottom: 1rem;
+    border-bottom: 2px solid #e5e7eb;
+    padding-bottom: 0.75rem;
+}
+
+.dashboard-header h2 {
+    font-size: 1.3rem;
+    color: #1e3a5f;
+}
+
+.count {
+    font-size: 0.95rem;
+    color: #6b7280;
+    font-weight: 400;
+}
+
+/* ===== Filter Form ===== */
+.filter-form {
+    margin-bottom: 1.2rem;
+}
+
+.filter-row {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    flex-wrap: wrap;
+}
+
+.filter-input {
+    flex: 1;
+    min-width: 220px;
+    padding: 0.45rem 0.8rem;
+    border: 1px solid #d1d5db;
+    border-radius: 5px;
+    font-size: 0.9rem;
+}
+
+.filter-input:focus {
+    outline: none;
+    border-color: #2563eb;
+    box-shadow: 0 0 0 2px rgba(37,99,235,0.15);
+}
+
+.filter-active {
+    font-size: 0.9rem;
+    color: #374151;
+    background: #e0edff;
+    border: 1px solid #bfdbfe;
+    border-radius: 4px;
+    padding: 0.3rem 0.7rem;
+}
+
+.filter-row label {
+    font-size: 0.88rem;
+    color: #555;
+    white-space: nowrap;
+}
+
+.filter-row select {
+    padding: 0.45rem 0.6rem;
+    border: 1px solid #d1d5db;
+    border-radius: 5px;
+    font-size: 0.88rem;
+    background: #fff;
+}
+
+/* ===== Contacts Table ===== */
+.contacts-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9rem;
+}
+
+.contacts-table thead {
+    background: #1e3a5f;
+    color: #fff;
+}
+
+.contacts-table th {
+    padding: 0.7rem 1rem;
+    text-align: left;
+    font-weight: 600;
+    font-size: 0.85rem;
+    letter-spacing: 0.3px;
+}
+
+.contacts-table tbody tr {
+    border-bottom: 1px solid #e5e7eb;
+    transition: background 0.15s;
+}
+
+.contacts-table tbody tr:hover {
+    background: #f0f6ff;
+}
+
+.contacts-table td {
+    padding: 0.65rem 1rem;
+    vertical-align: middle;
+}
+
+.contacts-table td a {
+    font-weight: 600;
+    color: #1d4ed8;
+}
+
+.actions {
+    display: flex;
+    gap: 0.4rem;
+    white-space: nowrap;
+}
+
+/* ===== Empty State ===== */
+.empty-state {
+    text-align: center;
+    padding: 3rem 1rem;
+    color: #6b7280;
+}
+
+.empty-state p {
+    font-size: 1.1rem;
+    margin-bottom: 1rem;
+}
+
+/* ===== Form Pages ===== */
+.form-page {
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+    padding: 2rem 2.5rem;
+    max-width: 760px;
+    margin: 0 auto;
+}
+
+.form-page h2 {
+    font-size: 1.3rem;
+    color: #1e3a5f;
+    margin-bottom: 1.5rem;
+    border-bottom: 2px solid #e5e7eb;
+    padding-bottom: 0.75rem;
+}
+
+.contact-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.form-row {
+    display: flex;
+    gap: 1rem;
+}
+
+.form-row .form-group {
+    flex: 1;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+}
+
+.form-group-sm {
+    flex: 0 0 100px !important;
+}
+
+.form-group label {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #374151;
+}
+
+.form-group input,
+.form-group textarea,
+.form-group select {
+    padding: 0.5rem 0.75rem;
+    border: 1px solid #d1d5db;
+    border-radius: 5px;
+    font-size: 0.9rem;
+    font-family: inherit;
+    background: #fafafa;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+    outline: none;
+    border-color: #2563eb;
+    background: #fff;
+    box-shadow: 0 0 0 2px rgba(37,99,235,0.15);
+}
+
+.required {
+    color: #dc2626;
+}
+
+.form-actions {
+    display: flex;
+    gap: 0.75rem;
+    margin-top: 0.5rem;
+}
+
+/* ===== View Page ===== */
+.view-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 2px solid #e5e7eb;
+    padding-bottom: 0.75rem;
+    margin-bottom: 1.5rem;
+}
+
+.view-header h2 {
+    border: none;
+    margin: 0;
+    padding: 0;
+}
+
+.view-actions {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.detail-card {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.detail-section h3 {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: #6b7280;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    margin-bottom: 0.6rem;
+}
+
+.detail-row {
+    display: flex;
+    gap: 1rem;
+    padding: 0.4rem 0;
+    border-bottom: 1px solid #f3f4f6;
+}
+
+.detail-label {
+    font-weight: 600;
+    font-size: 0.88rem;
+    color: #6b7280;
+    min-width: 90px;
+}
+
+.detail-value {
+    font-size: 0.9rem;
+    color: #111;
+}
+
+.notes-text {
+    background: #f9fafb;
+    border: 1px solid #e5e7eb;
+    border-radius: 5px;
+    padding: 0.75rem 1rem;
+    font-size: 0.9rem;
+    white-space: pre-wrap;
+    color: #374151;
+}
+
+/* ===== Confirm Delete ===== */
+.confirm-box {
+    text-align: center;
+    padding: 2rem 1rem;
+}
+
+.confirm-icon {
+    font-size: 3rem;
+    color: #f59e0b;
+    margin-bottom: 0.5rem;
+}
+
+.confirm-box h2 {
+    border: none;
+    justify-content: center;
+    margin-bottom: 1rem;
+}
+
+.confirm-name {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #1e3a5f;
+    margin: 0.5rem 0;
+}
+
+.confirm-company {
+    font-weight: 400;
+    color: #6b7280;
+    font-size: 1rem;
+}
+
+.confirm-warning {
+    color: #dc2626;
+    font-size: 0.88rem;
+    margin-bottom: 1.5rem;
+}
+
+.confirm-actions {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+}

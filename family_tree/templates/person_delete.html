@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block title %}Delete {{ person.first_name }} {{ person.last_name }}{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card border-danger">
+            <div class="card-header bg-danger text-white">Confirm Delete</div>
+            <div class="card-body">
+                <p>Are you sure you want to delete <strong>{{ person.first_name }} {{ person.last_name }}</strong>?</p>
+                <p class="text-muted small">All references to this person (as parent or spouse) will be cleared. This cannot be undone.</p>
+                <form method="post" class="d-inline">
+                    <button type="submit" class="btn btn-danger">Yes, Delete</button>
+                </form>
+                <a href="{{ url_for('person_detail', pid=person.id) }}" class="btn btn-secondary ms-2">Cancel</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

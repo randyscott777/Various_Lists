@@ -1,0 +1,70 @@
+<!-- Created by Claude Code -->
+{% extends "base.html" %}
+{% block content %}
+
+<div class="form-page">
+  <div class="form-card">
+    <div class="form-card-header">
+      <h2>&#x270F;&#xFE0F; Edit Goal</h2>
+    </div>
+    <div class="form-card-body">
+
+      {% if error %}
+      <div class="form-error">{{ error }}</div>
+      {% endif %}
+
+      <form method="POST" action="{{ url_for('edit', id=goal.id) }}">
+
+        <div class="form-group">
+          <label for="title">Title <span class="req">*</span></label>
+          <input type="text" id="title" name="title" required value="{{ goal.title }}">
+        </div>
+
+        <div class="form-group">
+          <label for="description">Description</label>
+          <input type="text" id="description" name="description" value="{{ goal.description or '' }}">
+        </div>
+
+        <div class="form-row-3">
+          <div class="form-group">
+            <label for="category">Category</label>
+            <select id="category" name="category">
+              {% for c in categories %}
+              <option value="{{ c }}" {% if goal.category == c %}selected{% endif %}>{{ c }}</option>
+              {% endfor %}
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="priority">Priority</label>
+            <select id="priority" name="priority">
+              {% for p in priorities %}
+              <option value="{{ p }}" {% if goal.priority == p %}selected{% endif %}>{{ p }}</option>
+              {% endfor %}
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="status">Status</label>
+            <select id="status" name="status">
+              {% for s in statuses %}
+              <option value="{{ s }}" {% if goal.status == s %}selected{% endif %}>{{ s }}</option>
+              {% endfor %}
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="due_date">Due Date</label>
+          <input type="date" id="due_date" name="due_date" value="{{ goal.due_date or '' }}">
+        </div>
+
+        <div class="form-actions">
+          <button type="submit" class="btn-save">&#x2713; Update Goal</button>
+          <a href="{{ url_for('index') }}" class="btn-cancel">Cancel</a>
+        </div>
+
+      </form>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

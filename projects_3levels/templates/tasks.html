@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Tasks — {{ project['name'] }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<div class="header">
+    <h1>Projects App</h1>
+    <span class="breadcrumb">
+        <a href="{{ url_for('index') }}">Dashboard</a>
+        <span>&rsaquo;</span> {{ project['name'] }}
+        <span>&rsaquo;</span> Tasks
+    </span>
+</div>
+<div class="container">
+
+    <!-- Project info bar -->
+    <div style="background:#16213e;border:1px solid #0f3460;border-radius:8px;padding:14px 20px;margin-bottom:20px;display:flex;gap:20px;align-items:center;flex-wrap:wrap;">
+        <div>
+            <span style="color:#aaa;font-size:0.8rem;text-transform:uppercase;">Project</span><br>
+            <strong>{{ project['name'] }}</strong>
+        </div>
+        <div>
+            <span style="color:#aaa;font-size:0.8rem;text-transform:uppercase;">Status</span><br>
+            {% set sc = project['status'] | lower | replace(' ', '-') %}
+            <span class="badge status-{{ sc }}">{{ project['status'] }}</span>
+        </div>
+        <div>
+            <span style="color:#aaa;font-size:0.8rem;text-transform:uppercase;">Priority</span><br>
+            {% set pc = project['priority'] | lower %}
+            <span class="badge priority-{{ pc }}">{{ project['priority'] }}</span>
+        </div>
+        {% if project['due_date'] %}
+        <div>
+            <span style="color:#aaa;font-size:0.8rem;text-transform:uppercase;">Due</span><br>
+            {{ project['due_date'] }}
+        </div>
+        {% endif %}
+        <div style="margin-left:auto;display:flex;gap:8px;">
+            <a href="{{ url_for('project_edit', project_id=project['id']) }}" class="btn btn-warning btn-sm">Edit Project</a>
+        </div>
+    </div>
+
+    <!-- Stats -->
+    <div class="stats-row">
+        <div class="stat-card">
+            <div class="stat-value">{{ tasks | length }}</div>
+            <div class="stat-label">Tasks</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-value">{{ tasks | selectattr('status', 'equalto', 'In Progress') | list | length }}</div>
+            <div class="stat-label">In Progress</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-value">{{ tasks | selectattr('status', 'equalto', 'Done') | list | length }}</div>
+            <div class="stat-label">Done</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-value">{{ tasks | selectattr('status', 'equalto', 'Blocked') | list | length }}</div>
+            <div class="stat-label">Blocked</div>
+        </div>
+    </div>
+
+    <!-- Filter / Sort toolbar -->
+    <form method="POST" action="{{ url_for('tasks', project_id=project['id']) }}">
+        <div class="toolbar">
+            <div class="toolbar-group">
+                <label>Filter by Status</label>
+                <select name="filter_status">
+                    <option value="">All Statuses</option>
+                    {% for s in status_options %}
+                    <option value="{{ s }}" {% if filter_status == s %}selected{% endif %}>{{ s }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="toolbar-group">
+                <label>Filter by Priority</label>
+                <select name="filter_priority">
+                    <option value="">All Priorities</option>
+                    {% for p in priority_options %}
+                    <option value="{{ p }}" {% if filter_priority == p %}selected{% endif %}>{{ p }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="toolbar-group">
+                <label>Sort By</label>
+                <select name="sort_field">
+                    <option value="name"       {% if sort_field == 'name' %}selected{% endif %}>Name</option>
+                    <option value="status"     {% if sort_field == 'status' %}selected{% endif %}>Status</option>
+                    <option value="priority"   {% if sort_field == 'priority' %}selected{% endif %}>Priority</option>
+                    <option value="due_date"   {% if sort_field == 'due_date' %}selected{% endif %}>Due Date</option>
+                    <option value="created_at" {% if sort_field == 'created_at' %}selected{% endif %}>Created</option>
+                </select>
+            </div>
+            <div class="toolbar-group">
+                <label>Direction</label>
+                <select name="sort_dir">
+                    <option value="asc"  {% if sort_dir == 'asc' %}selected{% endif %}>Ascending</option>
+                    <option value="desc" {% if sort_dir == 'desc' %}selected{% endif %}>Descending</option>
+                </select>
+            </div>
+            <div class="toolbar-group">
+                <label>&nbsp;</label>
+                <button type="submit" class="btn btn-primary">Apply</button>
+            </div>
+        </div>
+    </form>
+
+    <!-- Add Task -->
+    <div class="action-row">
+        <h2>Tasks</h2>
+        <div style="display:flex;gap:8px;">
+            <a href="{{ url_for('index') }}" class="btn btn-secondary">Back</a>
+            <a href="{{ url_for('task_new', project_id=project['id']) }}" class="btn btn-success">+ New Task</a>
+        </div>
+    </div>
+
+    <!-- Tasks table -->
+    {% if tasks %}
+    <div class="table-wrap">
+        <table>
+            <thead>
+                <tr>
+                    <th>Task Name</th>
+                    <th>Status</th>
+                    <th>Priority</th>
+                    <th>Due Date</th>
+                    <th>Sub-tasks</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for t in tasks %}
+            <tr>
+                <td>
+                    <a href="{{ url_for('subtasks', task_id=t['id']) }}">{{ t['name'] }}</a>
+                    {% if t['description'] %}<br><small style="color:#888;">{{ t['description'][:80] }}</small>{% endif %}
+                </td>
+                <td>
+                    {% set sc = t['status'] | lower | replace(' ', '-') %}
+                    <span class="badge status-{{ sc }}">{{ t['status'] }}</span>
+                </td>
+                <td>
+                    {% set pc = t['priority'] | lower %}
+                    <span class="badge priority-{{ pc }}">{{ t['priority'] }}</span>
+                </td>
+                <td>{{ t['due_date'] or '—' }}</td>
+                <td><span class="count-badge">{{ t['subtask_count'] }}</span></td>
+                <td>
+                    <div class="actions">
+                        <a href="{{ url_for('subtasks', task_id=t['id']) }}" class="btn btn-primary btn-sm">Sub-tasks</a>
+                        <a href="{{ url_for('task_edit', task_id=t['id']) }}" class="btn btn-warning btn-sm">Edit</a>
+                        <a href="{{ url_for('task_delete', task_id=t['id']) }}" class="btn btn-danger btn-sm">Delete</a>
+                    </div>
+                </td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <div class="empty-state">No tasks found. <a href="{{ url_for('task_new', project_id=project['id']) }}">Add the first task</a>.</div>
+    {% endif %}
+
+</div>
+</body>
+</html>

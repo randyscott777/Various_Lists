@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+{% block title %}Edit Bucket List Item{% endblock %}
+{% block content %}
+
+<div class="form-container">
+    <h2 class="form-title">&#9998; Edit Dream</h2>
+    <form method="POST" action="{{ url_for('edit', item_id=item.id) }}">
+
+        <div class="form-group">
+            <label for="title">Title <span class="required">*</span></label>
+            <input type="text" id="title" name="title" required value="{{ item.title }}">
+        </div>
+
+        <div class="form-row">
+            <div class="form-group">
+                <label for="category">Category</label>
+                <select id="category" name="category">
+                    {% for cat in categories %}
+                    <option value="{{ cat }}" {% if item.category == cat %}selected{% endif %} class="opt-category-{{ cat | lower }}">{{ cat }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="priority">Priority</label>
+                <select id="priority" name="priority">
+                    {% for p in priorities %}
+                    <option value="{{ p }}" {% if item.priority == p %}selected{% endif %} class="opt-priority-{{ p | lower }}">{{ p }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="status">Status</label>
+                <select id="status" name="status">
+                    {% for s in statuses %}
+                    <option value="{{ s }}" {% if item.status == s %}selected{% endif %} class="opt-status-{{ s | replace(' ', '-') | lower }}">{{ s }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="description">Description</label>
+            <textarea id="description" name="description" rows="3">{{ item.description or '' }}</textarea>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group">
+                <label for="target_date">Target Date</label>
+                <input type="date" id="target_date" name="target_date" value="{{ item.target_date or '' }}">
+            </div>
+            <div class="form-group">
+                <label for="completed_date">Completed Date</label>
+                <input type="date" id="completed_date" name="completed_date" value="{{ item.completed_date or '' }}">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="notes">Notes</label>
+            <textarea id="notes" name="notes" rows="2">{{ item.notes or '' }}</textarea>
+        </div>
+
+        <div class="form-actions">
+            <button type="submit" class="btn-primary">Update Item</button>
+            <a href="{{ url_for('index') }}" class="btn-secondary">Cancel</a>
+        </div>
+
+    </form>
+</div>
+
+{% endblock %}

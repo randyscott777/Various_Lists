@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1>Meals Dashboard</h1>
+    <a class="btn btn-primary" href="{{ url_for('meal_add') }}">+ Add Meal</a>
+</div>
+
+<form class="filter-bar" method="get" action="{{ url_for('index') }}">
+    <div class="filter-group">
+        <label for="filter_name">Search</label>
+        <input id="filter_name" type="text" name="filter_name"
+               value="{{ filter_name }}" placeholder="Filter by meal name…">
+    </div>
+    <div class="filter-group">
+        <label for="sort_field">Sort by</label>
+        <select id="sort_field" name="sort_field">
+            <option value="name"       {% if sort_field == 'name'       %}selected{% endif %}>Name</option>
+            <option value="created_at" {% if sort_field == 'created_at' %}selected{% endif %}>Date Added</option>
+        </select>
+    </div>
+    <div class="filter-group">
+        <label for="sort_dir">Direction</label>
+        <select id="sort_dir" name="sort_dir">
+            <option value="asc"  {% if sort_dir == 'asc'  %}selected{% endif %}>A → Z / Oldest</option>
+            <option value="desc" {% if sort_dir == 'desc' %}selected{% endif %}>Z → A / Newest</option>
+        </select>
+    </div>
+    <button class="btn btn-secondary" type="submit">Apply</button>
+    <a class="btn btn-ghost" href="{{ url_for('index') }}">Reset</a>
+</form>
+
+<div class="stats-bar">
+    <span>{{ meals|length }} meal{{ 's' if meals|length != 1 }}</span>
+</div>
+
+{% if meals %}
+<div class="meal-grid">
+    {% for meal in meals %}
+    <div class="meal-card">
+        <div class="meal-card-header">
+            <h2><a href="{{ url_for('meal_view', meal_id=meal['id']) }}">{{ meal['name'] }}</a></h2>
+            <span class="badge">{{ meal['ingredient_count'] }} ingredient{{ 's' if meal['ingredient_count'] != 1 }}</span>
+        </div>
+        {% if meal['description'] %}
+        <p class="meal-desc">{{ meal['description'] }}</p>
+        {% endif %}
+        <div class="meal-card-footer">
+            <span class="date">Added {{ meal['created_at'][:10] }}</span>
+            <div class="actions">
+                <a class="btn btn-sm btn-secondary" href="{{ url_for('meal_view', meal_id=meal['id']) }}">View</a>
+                <a class="btn btn-sm btn-ghost" href="{{ url_for('meal_edit', meal_id=meal['id']) }}">Edit</a>
+                <a class="btn btn-sm btn-danger" href="{{ url_for('meal_delete', meal_id=meal['id']) }}">Delete</a>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% else %}
+<div class="empty-state">
+    <p>No meals found. <a href="{{ url_for('meal_add') }}">Add your first meal.</a></p>
+</div>
+{% endif %}
+{% endblock %}

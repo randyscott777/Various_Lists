@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Delete To-Do</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Delete To-Do</h1>
+            <a href="{{ url_for('index') }}" class="btn btn-back">Back to List</a>
+        </header>
+
+        <div class="form-card confirm-card">
+            <div class="confirm-icon">&#9888;</div>
+            <h2>Are you sure?</h2>
+            <p>You are about to permanently delete this to-do. This action cannot be undone.</p>
+
+            <div class="confirm-details">
+                <div class="detail-row">
+                    <span class="detail-label">Title:</span>
+                    <span class="detail-value">{{ todo['title'] }}</span>
+                </div>
+                {% if todo['description'] %}
+                <div class="detail-row">
+                    <span class="detail-label">Description:</span>
+                    <span class="detail-value">{{ todo['description'] }}</span>
+                </div>
+                {% endif %}
+                <div class="detail-row">
+                    <span class="detail-label">Status:</span>
+                    <span class="badge status-{{ todo['status'] | replace(' ', '-') | lower }}">{{ todo['status'] }}</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">Priority:</span>
+                    <span class="badge priority-{{ todo['priority'] | lower }}">{{ todo['priority'] }}</span>
+                </div>
+                {% if todo['due_date'] %}
+                <div class="detail-row">
+                    <span class="detail-label">Due Date:</span>
+                    <span class="detail-value">{{ todo['due_date'] }}</span>
+                </div>
+                {% endif %}
+            </div>
+
+            <form method="POST" action="{{ url_for('delete', todo_id=todo['id']) }}">
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-delete">Yes, Delete It</button>
+                    <a href="{{ url_for('index') }}" class="btn btn-back">Cancel</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

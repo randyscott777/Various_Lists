@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Sub-tasks — {{ task['name'] }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<div class="header">
+    <h1>Projects App</h1>
+    <span class="breadcrumb">
+        <a href="{{ url_for('index') }}">Dashboard</a>
+        <span>&rsaquo;</span>
+        <a href="{{ url_for('tasks', project_id=project['id']) }}">{{ project['name'] }}</a>
+        <span>&rsaquo;</span> {{ task['name'] }}
+        <span>&rsaquo;</span> Sub-tasks
+    </span>
+</div>
+<div class="container">
+
+    <!-- Task info bar -->
+    <div style="background:#16213e;border:1px solid #0f3460;border-radius:8px;padding:14px 20px;margin-bottom:20px;display:flex;gap:20px;align-items:center;flex-wrap:wrap;">
+        <div>
+            <span style="color:#aaa;font-size:0.8rem;text-transform:uppercase;">Task</span><br>
+            <strong>{{ task['name'] }}</strong>
+        </div>
+        <div>
+            <span style="color:#aaa;font-size:0.8rem;text-transform:uppercase;">Status</span><br>
+            {% set sc = task['status'] | lower | replace(' ', '-') %}
+            <span class="badge status-{{ sc }}">{{ task['status'] }}</span>
+        </div>
+        <div>
+            <span style="color:#aaa;font-size:0.8rem;text-transform:uppercase;">Priority</span><br>
+            {% set pc = task['priority'] | lower %}
+            <span class="badge priority-{{ pc }}">{{ task['priority'] }}</span>
+        </div>
+        {% if task['due_date'] %}
+        <div>
+            <span style="color:#aaa;font-size:0.8rem;text-transform:uppercase;">Due</span><br>
+            {{ task['due_date'] }}
+        </div>
+        {% endif %}
+        <div style="margin-left:auto;display:flex;gap:8px;">
+            <a href="{{ url_for('task_edit', task_id=task['id']) }}" class="btn btn-warning btn-sm">Edit Task</a>
+        </div>
+    </div>
+
+    <!-- Stats -->
+    <div class="stats-row">
+        <div class="stat-card">
+            <div class="stat-value">{{ subtasks | length }}</div>
+            <div class="stat-label">Sub-tasks</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-value">{{ subtasks | selectattr('status', 'equalto', 'In Progress') | list | length }}</div>
+            <div class="stat-label">In Progress</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-value">{{ subtasks | selectattr('status', 'equalto', 'Done') | list | length }}</div>
+            <div class="stat-label">Done</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-value">{{ subtasks | selectattr('status', 'equalto', 'Blocked') | list | length }}</div>
+            <div class="stat-label">Blocked</div>
+        </div>
+    </div>
+
+    <!-- Filter / Sort toolbar -->
+    <form method="POST" action="{{ url_for('subtasks', task_id=task['id']) }}">
+        <div class="toolbar">
+            <div class="toolbar-group">
+                <label>Filter by Status</label>
+                <select name="filter_status">
+                    <option value="">All Statuses</option>
+                    {% for s in status_options %}
+                    <option value="{{ s }}" {% if filter_status == s %}selected{% endif %}>{{ s }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="toolbar-group">
+                <label>Sort By</label>
+                <select name="sort_field">
+                    <option value="name"       {% if sort_field == 'name' %}selected{% endif %}>Name</option>
+                    <option value="status"     {% if sort_field == 'status' %}selected{% endif %}>Status</option>
+                    <option value="due_date"   {% if sort_field == 'due_date' %}selected{% endif %}>Due Date</option>
+                    <option value="created_at" {% if sort_field == 'created_at' %}selected{% endif %}>Created</option>
+                </select>
+            </div>
+            <div class="toolbar-group">
+                <label>Direction</label>
+                <select name="sort_dir">
+                    <option value="asc"  {% if sort_dir == 'asc' %}selected{% endif %}>Ascending</option>
+                    <option value="desc" {% if sort_dir == 'desc' %}selected{% endif %}>Descending</option>
+                </select>
+            </div>
+            <div class="toolbar-group">
+                <label>&nbsp;</label>
+                <button type="submit" class="btn btn-primary">Apply</button>
+            </div>
+        </div>
+    </form>
+
+    <!-- Add Sub-task -->
+    <div class="action-row">
+        <h2>Sub-tasks</h2>
+        <div style="display:flex;gap:8px;">
+            <a href="{{ url_for('tasks', project_id=project['id']) }}" class="btn btn-secondary">Back</a>
+            <a href="{{ url_for('subtask_new', task_id=task['id']) }}" class="btn btn-success">+ New Sub-task</a>
+        </div>
+    </div>
+
+    <!-- Sub-tasks table -->
+    {% if subtasks %}
+    <div class="table-wrap">
+        <table>
+            <thead>
+                <tr>
+                    <th>Sub-task Name</th>
+                    <th>Status</th>
+                    <th>Due Date</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for st in subtasks %}
+            <tr>
+                <td>
+                    {{ st['name'] }}
+                    {% if st['description'] %}<br><small style="color:#888;">{{ st['description'][:80] }}</small>{% endif %}
+                </td>
+                <td>
+                    {% set sc = st['status'] | lower | replace(' ', '-') %}
+                    <span class="badge status-{{ sc }}">{{ st['status'] }}</span>
+                </td>
+                <td>{{ st['due_date'] or '—' }}</td>
+                <td>
+                    <div class="actions">
+                        <a href="{{ url_for('subtask_edit', subtask_id=st['id']) }}" class="btn btn-warning btn-sm">Edit</a>
+                        <a href="{{ url_for('subtask_delete', subtask_id=st['id']) }}" class="btn btn-danger btn-sm">Delete</a>
+                    </div>
+                </td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <div class="empty-state">No sub-tasks found. <a href="{{ url_for('subtask_new', task_id=task['id']) }}">Add the first sub-task</a>.</div>
+    {% endif %}
+
+</div>
+</body>
+</html>

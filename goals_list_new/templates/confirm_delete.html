@@ -1,0 +1,36 @@
+<!-- Created by Claude Code -->
+{% extends "base.html" %}
+{% block content %}
+
+<div class="confirm-page">
+  <div class="confirm-card">
+    <div class="confirm-header">
+      <h2>&#x1F5D1;&#xFE0F; Delete Goal</h2>
+    </div>
+    <div class="confirm-body">
+      <p>Are you sure you want to permanently delete this goal?</p>
+
+      <div class="confirm-item">
+        <div class="confirm-title">{{ goal.title }}</div>
+        {% if goal.description %}
+        <div class="confirm-desc">{{ goal.description }}</div>
+        {% endif %}
+        <div class="confirm-meta">
+          <span class="chip chip-{{ goal.category | lower }}">{{ goal.category }}</span>
+          <span class="chip chip-pri-{{ goal.priority | lower }}">{{ goal.priority }}</span>
+          &bull; {{ goal.status }}
+          {% if goal.due_date %}&bull; Due {{ goal.due_date }}{% endif %}
+        </div>
+      </div>
+
+      <div class="confirm-actions">
+        <form method="POST" action="{{ url_for('delete_confirm', id=goal.id) }}" style="display:inline">
+          <button type="submit" class="btn-danger">&#x2714; Yes, Delete</button>
+        </form>
+        <a href="{{ url_for('index') }}" class="btn-cancel">&#x2715; Cancel</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,139 @@
+{% extends "base.html" %}
+{% block content %}
+
+<!-- ── Page Header ── -->
+<div class="page-header">
+  <div class="header-left">
+    <h1>&#x1F4CA; Chart of Accounts</h1>
+    <div class="subtitle">{{ total }} accounts &bull; {{ active }} active</div>
+  </div>
+  <a href="{{ url_for('add') }}" class="btn-new">+ New Account</a>
+</div>
+
+<!-- ── Stats Dashboard ── -->
+<div class="stats-grid">
+  <div class="stat-card s-total">
+    <div class="stat-number">{{ total }}</div>
+    <div class="stat-label">Total</div>
+    <div class="progress-bar"><div class="progress-fill" style="width:100%"></div></div>
+  </div>
+  {% for t in account_types %}
+  <div class="stat-card s-{{ t | lower }}">
+    <div class="stat-number">{{ by_type[t] }}</div>
+    <div class="stat-label">{{ t }}</div>
+    <div class="progress-bar">
+      <div class="progress-fill" style="width:{{ ((by_type[t] / total * 100) | int) if total > 0 else 0 }}%"></div>
+    </div>
+  </div>
+  {% endfor %}
+  <div class="stat-card s-active">
+    <div class="stat-number">{{ active }}</div>
+    <div class="stat-label">Active</div>
+    <div class="progress-bar">
+      <div class="progress-fill" style="width:{{ ((active / total * 100) | int) if total > 0 else 0 }}%"></div>
+    </div>
+  </div>
+  <div class="stat-card s-inactive">
+    <div class="stat-number">{{ inactive }}</div>
+    <div class="stat-label">Inactive</div>
+    <div class="progress-bar">
+      <div class="progress-fill" style="width:{{ ((inactive / total * 100) | int) if total > 0 else 0 }}%"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ── Filter / Sort Bar (sticky) ── -->
+<div class="controls">
+  <form method="POST" action="/">
+    <div class="filter-row">
+      <select name="filter_type">
+        <option value="">All Types</option>
+        {% for t in account_types %}
+        <option value="{{ t }}" {% if filter_type == t %}selected{% endif %}>{{ t }}</option>
+        {% endfor %}
+      </select>
+
+      <select name="filter_subtype">
+        <option value="">All Subtypes</option>
+        {% for s in all_subtypes %}
+        <option value="{{ s }}" {% if filter_subtype == s %}selected{% endif %}>{{ s }}</option>
+        {% endfor %}
+      </select>
+
+      <select name="filter_active">
+        <option value="">All Status</option>
+        <option value="Yes" {% if filter_active == 'Yes' %}selected{% endif %}>Active</option>
+        <option value="No"  {% if filter_active == 'No'  %}selected{% endif %}>Inactive</option>
+      </select>
+
+      <select name="sort_field">
+        {% for f in valid_sort_fields %}
+        <option value="{{ f }}" {% if sort_field == f %}selected{% endif %}>{{ sort_labels[f] }}</option>
+        {% endfor %}
+      </select>
+
+      <select name="sort_dir">
+        <option value="asc"  {% if sort_dir == 'asc'  %}selected{% endif %}>A &rarr; Z</option>
+        <option value="desc" {% if sort_dir == 'desc' %}selected{% endif %}>Z &rarr; A</option>
+      </select>
+
+      <button type="submit" class="btn-apply">Apply</button>
+    </div>
+  </form>
+  <a href="{{ url_for('clear') }}" class="btn-clear">&#x2715; Clear</a>
+</div>
+
+<!-- ── Account Table ── -->
+{% if accounts %}
+<div class="table-wrap">
+  <table>
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Account Name</th>
+        <th>Type</th>
+        <th>Subtype</th>
+        <th>Active</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for a in accounts %}
+      <tr class="t-{{ a.account_type | lower }}{% if a.is_active == 'No' %} row-inactive{% endif %}">
+        <td><span class="acct-num">{{ a.account_number }}</span></td>
+        <td><span class="acct-name">{{ a.account_name }}</span></td>
+        <td><span class="chip chip-{{ a.account_type | lower }}">{{ a.account_type }}</span></td>
+        <td class="subtype-cell">{{ a.account_subtype }}</td>
+        <td>
+          <form action="{{ url_for('toggle', id=a.id) }}" method="POST" class="toggle-form">
+            <button type="submit" class="btn-toggle {{ 'on' if a.is_active == 'Yes' else 'off' }}">
+              {{ a.is_active }}
+            </button>
+          </form>
+        </td>
+        <td class="actions">
+          <a href="{{ url_for('edit', id=a.id) }}" class="btn-edit" title="Edit">&#x270F;&#xFE0F;</a>
+          <a href="{{ url_for('delete', id=a.id) }}" class="btn-del" title="Delete">&#x1F5D1;&#xFE0F;</a>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% else %}
+<div class="empty-state">
+  <div class="empty-icon">&#x1F4C2;</div>
+  <h3>No accounts found</h3>
+  <p>
+    {% if filter_type or filter_subtype or filter_active %}
+      No accounts match your current filters.
+      <a href="{{ url_for('clear') }}" class="empty-clear">Clear filters</a>
+    {% else %}
+      Get started by adding your first account.
+    {% endif %}
+  </p>
+  <a href="{{ url_for('add') }}" class="btn-new">+ New Account</a>
+</div>
+{% endif %}
+
+{% endblock %}

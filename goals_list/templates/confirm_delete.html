@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}Delete Goal — Goals & Plans{% endblock %}
+
+{% block content %}
+<div class="confirm-page">
+    <div class="confirm-box">
+        <div class="confirm-icon">!</div>
+        <h1>Delete Goal?</h1>
+        <p>Are you sure you want to delete <strong>{{ goal['title'] }}</strong>?</p>
+        <p class="confirm-warning">This action cannot be undone.</p>
+
+        <form method="post" class="confirm-form">
+            <button type="submit" class="btn btn-delete">Yes, Delete</button>
+            <a href="{{ url_for('detail', goal_id=goal['id']) }}" class="btn btn-secondary">Cancel</a>
+        </form>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% block content %}
+
+<section class="form-section">
+    <h2>Edit Entry</h2>
+    <form method="POST" class="entry-form">
+        <div class="form-group">
+            <label for="title">Title <span class="required">*</span></label>
+            <input type="text" id="title" name="title" required value="{{ row['title'] }}">
+        </div>
+        <div class="form-group">
+            <label for="category">Category <span class="required">*</span></label>
+            <select id="category" name="category" required>
+                {% for cat in categories %}
+                <option value="{{ cat }}"
+                    {% if row['category'] == cat %}selected{% endif %}
+                    style="background-color: {{ category_colors[cat] }}; color: white;">
+                    {{ cat }}
+                </option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="notes">Notes</label>
+            <textarea id="notes" name="notes" rows="5">{{ row['notes'] or '' }}</textarea>
+        </div>
+        <div class="form-actions">
+            <button type="submit" class="btn-save">Save Changes</button>
+            <a href="{{ url_for('index') }}" class="btn-cancel">Cancel</a>
+        </div>
+    </form>
+</section>
+
+{% endblock %}

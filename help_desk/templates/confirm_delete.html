@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block title %}Delete Ticket #{{ ticket.id }} — Help Desk{% endblock %}
+
+{% block content %}
+<div class="page-header">
+  <h1>Delete Ticket</h1>
+</div>
+
+<div class="confirm-card">
+  <div class="confirm-icon">&#9888;</div>
+  <h2>Are you sure?</h2>
+  <p>You are about to permanently delete the following ticket:</p>
+
+  <div class="confirm-ticket-info">
+    <strong>#{{ ticket.id }}</strong> — {{ ticket.title }}
+    <div class="badge-row">
+      <span class="badge priority-{{ ticket.priority | lower }}">{{ ticket.priority }}</span>
+      <span class="badge status-{{ ticket.status | lower | replace(' ', '-') }}">{{ ticket.status }}</span>
+    </div>
+  </div>
+
+  <p class="confirm-warning">This action cannot be undone.</p>
+
+  <form method="POST" action="{{ url_for('delete_ticket', id=ticket.id) }}">
+    <div class="confirm-actions">
+      <button type="submit" class="btn btn-danger">Yes, Delete</button>
+      <a href="{{ url_for('view_ticket', id=ticket.id) }}" class="btn btn-ghost">Cancel</a>
+    </div>
+  </form>
+</div>
+{% endblock %}

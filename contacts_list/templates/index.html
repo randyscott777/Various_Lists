@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+{% block title %}Contacts Dashboard{% endblock %}
+{% block content %}
+
+<div class="dashboard">
+    <div class="dashboard-header">
+        <h2>All Contacts <span class="count">({{ contacts|length }})</span></h2>
+    </div>
+
+    <div class="filter-row">
+        <a href="{{ url_for('filter_contacts', sort_field=sort_field, sort_dir=sort_dir) }}" class="btn-primary">Filter</a>
+        {% if filter_text %}
+        <span class="filter-active">Filtered by: <strong>{{ filter_text }}</strong></span>
+        {% endif %}
+        {% if filter_text or sort_field != 'last_name' or sort_dir != 'asc' %}
+        <a href="{{ url_for('index') }}" class="btn-reset">Reset</a>
+        {% endif %}
+    </div>
+
+    {% if contacts %}
+    <table class="contacts-table">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Company</th>
+                <th>Email</th>
+                <th>Phone</th>
+                <th>City</th>
+                <th>State</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for c in contacts %}
+            <tr>
+                <td><a href="{{ url_for('view', contact_id=c.id) }}">{{ c.last_name }}, {{ c.first_name }}</a></td>
+                <td>{{ c.company or '--' }}</td>
+                <td>{{ c.email or '--' }}</td>
+                <td>{{ c.phone or '--' }}</td>
+                <td>{{ c.city or '--' }}</td>
+                <td>{{ c.state or '--' }}</td>
+                <td class="actions">
+                    <a href="{{ url_for('edit', contact_id=c.id) }}" class="btn-edit">Edit</a>
+                    <a href="{{ url_for('delete', contact_id=c.id) }}" class="btn-delete">Delete</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <div class="empty-state">
+        <p>No contacts found.</p>
+        <a href="{{ url_for('add') }}" class="btn-primary">Add your first contact</a>
+    </div>
+    {% endif %}
+</div>
+
+{% endblock %}

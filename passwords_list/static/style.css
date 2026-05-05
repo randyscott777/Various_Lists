@@ -1,0 +1,379 @@
+/* ── Reset & Base ── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background: #1a1d23;
+    color: #e0e0e0;
+    min-height: 100vh;
+}
+
+a { color: #7c9ef5; text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+/* ── Layout ── */
+.container {
+    max-width: 1300px;
+    margin: 0 auto;
+    padding: 24px 20px;
+}
+
+/* ── Header ── */
+.app-header {
+    background: #23272f;
+    border-bottom: 3px solid #3b4aff;
+    padding: 16px 28px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 28px;
+}
+
+.app-header h1 {
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: #fff;
+    letter-spacing: 0.5px;
+}
+
+.app-header .icon { font-size: 1.8rem; }
+
+.header-actions {
+    margin-left: auto;
+}
+
+.btn {
+    display: inline-block;
+    padding: 8px 20px;
+    border-radius: 6px;
+    font-size: 0.92rem;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    transition: opacity 0.15s;
+}
+
+.btn:hover { opacity: 0.85; text-decoration: none; }
+
+.btn-primary   { background: #3b4aff; color: #fff; }
+.btn-secondary { background: #44505f; color: #e0e0e0; }
+.btn-danger    { background: #e53e3e; color: #fff; }
+.btn-info      { background: #2d8cff; color: #fff; }
+.btn-success   { background: #2ecc71; color: #fff; }
+
+/* ── Dashboard Stats ── */
+.stats-bar {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+}
+
+.stat-card {
+    background: #23272f;
+    border-radius: 8px;
+    padding: 14px 22px;
+    border-left: 4px solid #3b4aff;
+    min-width: 140px;
+}
+
+.stat-card .stat-value {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #fff;
+}
+
+.stat-card .stat-label {
+    font-size: 0.8rem;
+    color: #8a8f9a;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* ── Filter / Sort Bar ── */
+.filter-bar {
+    background: #23272f;
+    border-radius: 10px;
+    padding: 16px 20px;
+    margin-bottom: 22px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    flex-wrap: wrap;
+}
+
+.filter-bar label {
+    font-size: 0.85rem;
+    color: #8a8f9a;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    white-space: nowrap;
+}
+
+.filter-bar select {
+    background: #2e3340;
+    color: #e0e0e0;
+    border: 1px solid #3d4555;
+    border-radius: 6px;
+    padding: 7px 12px;
+    font-size: 0.92rem;
+    cursor: pointer;
+}
+
+.filter-bar select:focus { outline: 2px solid #3b4aff; }
+
+.filter-actions { margin-left: auto; display: flex; gap: 8px; }
+
+/* ── Table ── */
+.table-wrap {
+    background: #23272f;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+thead tr {
+    background: #2e3340;
+}
+
+thead th {
+    padding: 13px 16px;
+    text-align: left;
+    font-size: 0.82rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: #8a8f9a;
+    border-bottom: 2px solid #3d4555;
+}
+
+tbody tr {
+    border-bottom: 1px solid #2e3340;
+    transition: background 0.12s;
+}
+
+tbody tr:hover { background: #272c36; }
+tbody tr:last-child { border-bottom: none; }
+
+tbody td {
+    padding: 12px 16px;
+    font-size: 0.92rem;
+    vertical-align: middle;
+}
+
+.td-actions { display: flex; gap: 6px; }
+
+/* ── Category Badges (Monday.com style) ── */
+.badge {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 4px;
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: #fff;
+    white-space: nowrap;
+}
+
+.cat-Personal      { background: #2d8cff; }
+.cat-Work          { background: #2ecc71; color: #fff; }
+.cat-Finance       { background: #9b59b6; }
+.cat-Social        { background: #e67e22; }
+.cat-Email         { background: #1abc9c; }
+.cat-Shopping      { background: #f39c12; color: #fff; }
+.cat-Entertainment { background: #e91e8c; }
+.cat-Other         { background: #7f8c8d; }
+
+/* ── Password Mask ── */
+.pw-masked { letter-spacing: 3px; font-size: 1rem; color: #7c9ef5; }
+.pw-visible { font-family: monospace; color: #e0e0e0; }
+
+/* ── Forms ── */
+.form-card {
+    background: #23272f;
+    border-radius: 10px;
+    padding: 30px 32px;
+    max-width: 640px;
+    margin: 0 auto;
+}
+
+.form-card h2 {
+    font-size: 1.3rem;
+    color: #fff;
+    margin-bottom: 22px;
+    border-bottom: 2px solid #3b4aff;
+    padding-bottom: 10px;
+}
+
+.form-group {
+    margin-bottom: 18px;
+}
+
+.form-group label {
+    display: block;
+    font-size: 0.88rem;
+    color: #8a8f9a;
+    margin-bottom: 6px;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+    width: 100%;
+    background: #2e3340;
+    color: #e0e0e0;
+    border: 1px solid #3d4555;
+    border-radius: 6px;
+    padding: 9px 13px;
+    font-size: 0.95rem;
+    font-family: inherit;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+    outline: 2px solid #3b4aff;
+    border-color: #3b4aff;
+}
+
+.form-group textarea { resize: vertical; min-height: 80px; }
+
+/* Category select color options */
+select option[value="Personal"]      { background: #2d8cff; color: #fff; }
+select option[value="Work"]          { background: #2ecc71; color: #fff; }
+select option[value="Finance"]       { background: #9b59b6; color: #fff; }
+select option[value="Social"]        { background: #e67e22; color: #fff; }
+select option[value="Email"]         { background: #1abc9c; color: #fff; }
+select option[value="Shopping"]      { background: #f39c12; color: #fff; }
+select option[value="Entertainment"] { background: #e91e8c; color: #fff; }
+select option[value="Other"]         { background: #7f8c8d; color: #fff; }
+
+.form-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 24px;
+}
+
+/* ── Errors ── */
+.error-list {
+    background: #3d1515;
+    border-left: 4px solid #e53e3e;
+    border-radius: 6px;
+    padding: 12px 16px;
+    margin-bottom: 18px;
+    list-style: none;
+}
+
+.error-list li { color: #ff8080; font-size: 0.9rem; margin-bottom: 4px; }
+.error-list li:last-child { margin-bottom: 0; }
+
+/* ── View Card ── */
+.view-card {
+    background: #23272f;
+    border-radius: 10px;
+    padding: 28px 32px;
+    max-width: 640px;
+    margin: 0 auto;
+}
+
+.view-card h2 {
+    font-size: 1.3rem;
+    color: #fff;
+    margin-bottom: 22px;
+    border-bottom: 2px solid #3b4aff;
+    padding-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.detail-row {
+    display: flex;
+    padding: 11px 0;
+    border-bottom: 1px solid #2e3340;
+    gap: 16px;
+}
+
+.detail-row:last-of-type { border-bottom: none; }
+
+.detail-label {
+    min-width: 130px;
+    font-size: 0.82rem;
+    color: #8a8f9a;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    padding-top: 2px;
+}
+
+.detail-value {
+    flex: 1;
+    font-size: 0.95rem;
+    color: #e0e0e0;
+    word-break: break-all;
+}
+
+.view-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 24px;
+}
+
+/* ── Delete Confirm ── */
+.delete-card {
+    background: #23272f;
+    border-radius: 10px;
+    padding: 32px;
+    max-width: 500px;
+    margin: 40px auto;
+    text-align: center;
+    border-top: 4px solid #e53e3e;
+}
+
+.delete-card h2 {
+    color: #ff6b6b;
+    font-size: 1.4rem;
+    margin-bottom: 12px;
+}
+
+.delete-card p {
+    color: #b0b5c0;
+    margin-bottom: 8px;
+    font-size: 0.95rem;
+}
+
+.delete-card .site-name {
+    font-size: 1.1rem;
+    color: #fff;
+    font-weight: 700;
+    margin: 12px 0 24px;
+}
+
+.delete-actions {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+}
+
+/* ── Empty State ── */
+.empty-state {
+    text-align: center;
+    padding: 50px 20px;
+    color: #5a6070;
+}
+
+.empty-state .empty-icon { font-size: 3rem; margin-bottom: 12px; }
+.empty-state p { font-size: 1rem; }
+
+/* ── Breadcrumb ── */
+.breadcrumb {
+    font-size: 0.85rem;
+    color: #5a6070;
+    margin-bottom: 18px;
+}
+
+.breadcrumb a { color: #7c9ef5; }
+.breadcrumb span { margin: 0 6px; }

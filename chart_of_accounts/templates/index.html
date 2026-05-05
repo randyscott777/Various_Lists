@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Chart of Accounts</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <h1>Chart of Accounts</h1>
+        <a href="{{ url_for('add') }}" class="btn btn-add">+ New Account</a>
+    </div>
+
+    <!-- Filter & Sort Form -->
+    <form method="POST" action="/" class="filter-form">
+        <div class="filter-row">
+            <div class="filter-group">
+                <label>Type</label>
+                <select name="filter_type">
+                    <option value="">All Types</option>
+                    {% for t in account_types %}
+                    <option value="{{ t }}" {% if filter_type == t %}selected{% endif %}>{{ t }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="filter-group">
+                <label>Subtype</label>
+                <select name="filter_subtype">
+                    <option value="">All Subtypes</option>
+                    {% for s in all_subtypes %}
+                    <option value="{{ s }}" {% if filter_subtype == s %}selected{% endif %}>{{ s }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="filter-group">
+                <label>Active</label>
+                <select name="filter_active">
+                    <option value="">All</option>
+                    {% for a in active_options %}
+                    <option value="{{ a }}" {% if filter_active == a %}selected{% endif %}>{{ a }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="filter-group">
+                <label>Sort By</label>
+                <select name="sort_field">
+                    {% for f in valid_sort_fields %}
+                    <option value="{{ f }}" {% if sort_field == f %}selected{% endif %}>{{ f.replace('_', ' ').title() }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="filter-group">
+                <label>Direction</label>
+                <select name="sort_dir">
+                    <option value="asc" {% if sort_dir == 'asc' %}selected{% endif %}>Ascending</option>
+                    <option value="desc" {% if sort_dir == 'desc' %}selected{% endif %}>Descending</option>
+                </select>
+            </div>
+            <div class="filter-group filter-btn-group">
+                <button type="submit" class="btn btn-filter">Apply</button>
+                <a href="/clear" class="btn btn-clear">Clear</a>
+            </div>
+        </div>
+    </form>
+
+    <!-- Summary Stats -->
+    <div class="stats-row">
+        <div class="stat-box">Total Accounts: <strong>{{ accounts|length }}</strong></div>
+    </div>
+
+    <!-- Table -->
+    {% if accounts %}
+    <table class="accounts-table">
+        <thead>
+            <tr>
+                <th>Account #</th>
+                <th>Account Name</th>
+                <th>Type</th>
+                <th>Subtype</th>
+                <th>Active</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for a in accounts %}
+            <tr>
+                <td>{{ a.account_number }}</td>
+                <td>{{ a.account_name }}</td>
+                <td><span class="badge type-{{ a.account_type | lower }}">{{ a.account_type }}</span></td>
+                <td><span class="badge subtype-{{ a.account_subtype | lower | replace(' ', '-') }}">{{ a.account_subtype }}</span></td>
+                <td><span class="badge active-{{ a.is_active | lower }}">{{ a.is_active }}</span></td>
+                <td class="actions">
+                    <a href="{{ url_for('edit', id=a.id) }}" class="btn btn-edit">Edit</a>
+                    <a href="{{ url_for('delete', id=a.id) }}" class="btn btn-delete">Delete</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <div class="empty-state">No accounts found. <a href="{{ url_for('add') }}">Add one now.</a></div>
+    {% endif %}
+</div>
+</body>
+</html>

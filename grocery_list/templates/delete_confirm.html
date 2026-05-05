@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block title %}Delete Item — Grocery List{% endblock %}
+
+{% block content %}
+<div class="form-page">
+    <div class="form-card confirm-card">
+        <div class="confirm-icon">&#9888;</div>
+        <h2 class="form-title">Delete Item?</h2>
+        <p class="confirm-msg">
+            Are you sure you want to remove <strong>{{ item.name }}</strong> from your grocery list?
+            This cannot be undone.
+        </p>
+
+        <div class="item-preview">
+            <span class="preview-label">Category:</span> {{ item.category }}<br>
+            <span class="preview-label">Quantity:</span>
+            {% if item.quantity == item.quantity | int %}{{ item.quantity | int }}{% else %}{{ item.quantity }}{% endif %}
+            {% if item.unit %} {{ item.unit }}{% endif %}
+            {% if item.notes %}<br><span class="preview-label">Notes:</span> {{ item.notes }}{% endif %}
+        </div>
+
+        <div class="form-actions">
+            <a href="{{ url_for('index') }}" class="btn btn-secondary">Cancel</a>
+            <form method="post" action="{{ url_for('delete', item_id=item.id) }}" style="display:inline;">
+                <button type="submit" class="btn btn-danger">Yes, Delete</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>To-Do List</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>To-Do List</h1>
+            <a href="{{ url_for('add') }}" class="btn btn-add">+ New To-Do</a>
+        </header>
+
+        <!-- Status Summary Cards -->
+        <div class="summary-cards">
+            {% for s in statuses %}
+            <div class="summary-card status-{{ s | replace(' ', '-') | lower }}">
+                <div class="card-count">{{ counts[s] }}</div>
+                <div class="card-label">{{ s }}</div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <!-- Filter and Sort Form -->
+        <form method="GET" action="{{ url_for('index') }}" class="filter-form">
+            <div class="filter-row">
+                <div class="filter-group">
+                    <label for="filter_status">Filter by Status</label>
+                    <select name="filter_status" id="filter_status" class="select-status-filter" onchange="this.form.submit()">
+                        <option value="">All Statuses</option>
+                        {% for s in statuses %}
+                        <option value="{{ s }}" {% if filter_status == s %}selected{% endif %}
+                            class="status-opt-{{ s | replace(' ', '-') | lower }}">{{ s }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label for="filter_priority">Filter by Priority</label>
+                    <select name="filter_priority" id="filter_priority" onchange="this.form.submit()">
+                        <option value="">All Priorities</option>
+                        {% for p in priorities %}
+                        <option value="{{ p }}" {% if filter_priority == p %}selected{% endif %}
+                            class="priority-opt-{{ p | lower }}">{{ p }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label for="sort_field">Sort By</label>
+                    <select name="sort_field" id="sort_field" onchange="this.form.submit()">
+                        {% for f in sort_fields %}
+                        <option value="{{ f }}" {% if sort_field == f %}selected{% endif %}>
+                            {{ f | replace('_', ' ') | title }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label for="sort_dir">Direction</label>
+                    <select name="sort_dir" id="sort_dir" onchange="this.form.submit()">
+                        <option value="asc" {% if sort_dir == 'asc' %}selected{% endif %}>Ascending</option>
+                        <option value="desc" {% if sort_dir == 'desc' %}selected{% endif %}>Descending</option>
+                    </select>
+                </div>
+                {% if filter_status or filter_priority %}
+                <div class="filter-group filter-clear">
+                    <label>&nbsp;</label>
+                    <a href="{{ url_for('index') }}" class="btn btn-clear">Clear Filters</a>
+                </div>
+                {% endif %}
+            </div>
+        </form>
+
+        <!-- To-Do Table -->
+        <div class="table-wrap">
+            {% if todos %}
+            <table>
+                <thead>
+                    <tr>
+                        <th>Title</th>
+                        <th>Description</th>
+                        <th>Status</th>
+                        <th>Priority</th>
+                        <th>Due Date</th>
+                        <th>Created</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for todo in todos %}
+                    <tr>
+                        <td class="col-title">{{ todo['title'] }}</td>
+                        <td class="col-desc">{{ todo['description'] or '—' }}</td>
+                        <td>
+                            <span class="badge status-{{ todo['status'] | replace(' ', '-') | lower }}">
+                                {{ todo['status'] }}
+                            </span>
+                        </td>
+                        <td>
+                            <span class="badge priority-{{ todo['priority'] | lower }}">
+                                {{ todo['priority'] }}
+                            </span>
+                        </td>
+                        <td>{{ todo['due_date'] or '—' }}</td>
+                        <td>{{ todo['created_at'][:10] }}</td>
+                        <td class="actions">
+                            <a href="{{ url_for('edit', todo_id=todo['id']) }}" class="btn btn-edit">Edit</a>
+                            <a href="{{ url_for('delete', todo_id=todo['id']) }}" class="btn btn-delete">Delete</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% else %}
+            <div class="empty-state">
+                <p>No to-dos found. <a href="{{ url_for('add') }}">Add your first one!</a></p>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</body>
+</html>

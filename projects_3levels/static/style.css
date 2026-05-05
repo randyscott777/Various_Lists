@@ -1,0 +1,351 @@
+/* ===== RESET & BASE ===== */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background: #1a1a2e;
+    color: #e0e0e0;
+    min-height: 100vh;
+}
+
+a { color: #7eb8f7; text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+/* ===== HEADER / NAV ===== */
+.header {
+    background: #16213e;
+    padding: 14px 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 2px solid #0f3460;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.header h1 {
+    font-size: 1.5rem;
+    color: #7eb8f7;
+    letter-spacing: 1px;
+}
+
+.breadcrumb {
+    font-size: 0.85rem;
+    color: #aaa;
+}
+
+.breadcrumb a { color: #7eb8f7; }
+.breadcrumb span { margin: 0 6px; }
+
+/* ===== CONTAINER ===== */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 28px 24px;
+}
+
+/* ===== DASHBOARD TOOLBAR ===== */
+.toolbar {
+    background: #16213e;
+    border: 1px solid #0f3460;
+    border-radius: 8px;
+    padding: 16px 20px;
+    margin-bottom: 24px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    align-items: flex-end;
+}
+
+.toolbar-group {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.toolbar-group label {
+    font-size: 0.75rem;
+    color: #aaa;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.toolbar select, .toolbar input[type="text"] {
+    background: #0f3460;
+    color: #e0e0e0;
+    border: 1px solid #1a4a80;
+    border-radius: 5px;
+    padding: 6px 10px;
+    font-size: 0.9rem;
+    min-width: 130px;
+}
+
+.toolbar select:focus, .toolbar input:focus {
+    outline: none;
+    border-color: #7eb8f7;
+}
+
+.btn {
+    display: inline-block;
+    padding: 8px 18px;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+    font-size: 0.9rem;
+    font-weight: 600;
+    transition: opacity 0.15s;
+    text-align: center;
+}
+
+.btn:hover { opacity: 0.85; text-decoration: none; }
+
+.btn-primary { background: #0f3460; color: #7eb8f7; border: 1px solid #7eb8f7; }
+.btn-success { background: #1a6b3a; color: #a8e6bf; border: 1px solid #2ecc71; }
+.btn-danger  { background: #6b1a1a; color: #f5a0a0; border: 1px solid #e74c3c; }
+.btn-secondary { background: #333; color: #ccc; border: 1px solid #555; }
+.btn-warning { background: #6b4e1a; color: #f5d0a0; border: 1px solid #e67e22; }
+.btn-sm { padding: 4px 10px; font-size: 0.8rem; }
+
+/* ===== ADD BUTTON ROW ===== */
+.action-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+}
+
+.action-row h2 {
+    font-size: 1.1rem;
+    color: #7eb8f7;
+}
+
+/* ===== TABLE ===== */
+.table-wrap {
+    overflow-x: auto;
+    border-radius: 8px;
+    border: 1px solid #0f3460;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background: #16213e;
+}
+
+thead {
+    background: #0f3460;
+}
+
+thead th {
+    padding: 12px 14px;
+    text-align: left;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: #7eb8f7;
+    white-space: nowrap;
+}
+
+tbody tr {
+    border-bottom: 1px solid #1a2a4a;
+    transition: background 0.1s;
+}
+
+tbody tr:hover { background: #1a2a4a; }
+
+tbody td {
+    padding: 11px 14px;
+    font-size: 0.9rem;
+    vertical-align: middle;
+}
+
+/* ===== STATUS PILLS (rectangle) ===== */
+.badge {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 4px;
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+    color: #fff;
+    white-space: nowrap;
+}
+
+/* Status colors */
+.status-not-started  { background: #6b7280; }
+.status-in-progress  { background: #2563eb; }
+.status-done         { background: #16a34a; }
+.status-blocked      { background: #dc2626; }
+.status-on-hold      { background: #ca8a04; }
+
+/* Priority colors */
+.priority-low    { background: #0d9488; }
+.priority-medium { background: #ea580c; }
+.priority-high   { background: #9333ea; }
+
+/* ===== DROPDOWN OPTION COLORS ===== */
+/* Status options */
+option[value="Not Started"] { background: #6b7280; color: #fff; }
+option[value="In Progress"]  { background: #2563eb; color: #fff; }
+option[value="Done"]         { background: #16a34a; color: #fff; }
+option[value="Blocked"]      { background: #dc2626; color: #fff; }
+option[value="On Hold"]      { background: #ca8a04; color: #fff; }
+
+/* Priority options */
+option[value="Low"]    { background: #0d9488; color: #fff; }
+option[value="Medium"] { background: #ea580c; color: #fff; }
+option[value="High"]   { background: #9333ea; color: #fff; }
+
+/* ===== ACTIONS COLUMN ===== */
+.actions { display: flex; gap: 6px; flex-wrap: wrap; }
+
+/* ===== COUNT BADGE ===== */
+.count-badge {
+    background: #0f3460;
+    color: #7eb8f7;
+    border: 1px solid #1a4a80;
+    border-radius: 4px;
+    padding: 2px 8px;
+    font-size: 0.78rem;
+    font-weight: 600;
+}
+
+/* ===== FORM ===== */
+.form-card {
+    background: #16213e;
+    border: 1px solid #0f3460;
+    border-radius: 10px;
+    padding: 32px;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.form-card h2 {
+    margin-bottom: 24px;
+    color: #7eb8f7;
+    font-size: 1.2rem;
+}
+
+.form-group {
+    margin-bottom: 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.form-group label {
+    font-size: 0.85rem;
+    color: #aaa;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.form-group input[type="text"],
+.form-group input[type="date"],
+.form-group textarea,
+.form-group select {
+    background: #0f3460;
+    color: #e0e0e0;
+    border: 1px solid #1a4a80;
+    border-radius: 5px;
+    padding: 9px 12px;
+    font-size: 0.95rem;
+    width: 100%;
+}
+
+.form-group input:focus,
+.form-group textarea:focus,
+.form-group select:focus {
+    outline: none;
+    border-color: #7eb8f7;
+}
+
+.form-group textarea { resize: vertical; min-height: 80px; }
+
+.form-actions {
+    display: flex;
+    gap: 12px;
+    margin-top: 24px;
+}
+
+/* ===== CONFIRM DELETE ===== */
+.confirm-card {
+    background: #16213e;
+    border: 1px solid #dc2626;
+    border-radius: 10px;
+    padding: 36px;
+    max-width: 500px;
+    margin: 60px auto;
+    text-align: center;
+}
+
+.confirm-card h2 {
+    color: #f5a0a0;
+    margin-bottom: 12px;
+}
+
+.confirm-card p {
+    color: #ccc;
+    margin-bottom: 10px;
+    font-size: 0.95rem;
+}
+
+.confirm-card .item-name {
+    font-weight: 700;
+    color: #fff;
+    font-size: 1.1rem;
+}
+
+.confirm-card .warning-text {
+    color: #f59e0b;
+    font-size: 0.85rem;
+    margin-bottom: 24px;
+    display: block;
+}
+
+.confirm-actions {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+    margin-top: 24px;
+}
+
+/* ===== EMPTY STATE ===== */
+.empty-state {
+    text-align: center;
+    padding: 60px 20px;
+    color: #555;
+    font-size: 1rem;
+}
+
+/* ===== SUMMARY STATS ===== */
+.stats-row {
+    display: flex;
+    gap: 14px;
+    flex-wrap: wrap;
+    margin-bottom: 24px;
+}
+
+.stat-card {
+    background: #16213e;
+    border: 1px solid #0f3460;
+    border-radius: 8px;
+    padding: 14px 22px;
+    min-width: 130px;
+    text-align: center;
+}
+
+.stat-card .stat-value {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #7eb8f7;
+}
+
+.stat-card .stat-label {
+    font-size: 0.75rem;
+    color: #aaa;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-top: 2px;
+}

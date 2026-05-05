@@ -1,0 +1,108 @@
+{% extends "base.html" %}
+{% block title %}Dashboard — Goals & Plans{% endblock %}
+
+{% block content %}
+<div class="dashboard">
+
+    <section class="summary-cards">
+        <div class="card card-total">
+            <span class="card-count">{{ total }}</span>
+            <span class="card-label">Total</span>
+        </div>
+        {% for s in statuses %}
+        <div class="card card-status card-{{ s.lower().replace(' ', '-') }}">
+            <span class="card-count">{{ counts[s] }}</span>
+            <span class="card-label">{{ s }}</span>
+        </div>
+        {% endfor %}
+    </section>
+
+    <section class="controls">
+        <form method="get" action="{{ url_for('index') }}" class="filter-form">
+            <div class="filter-group">
+                <label>Category</label>
+                <select name="category">
+                    <option value="">All</option>
+                    {% for c in categories %}
+                    <option value="{{ c }}" {% if sel_category == c %}selected{% endif %}>{{ c }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="filter-group">
+                <label>Priority</label>
+                <select name="priority">
+                    <option value="">All</option>
+                    {% for p in priorities %}
+                    <option value="{{ p }}" {% if sel_priority == p %}selected{% endif %}>{{ p }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="filter-group">
+                <label>Status</label>
+                <select name="status">
+                    <option value="">All</option>
+                    {% for s in statuses %}
+                    <option value="{{ s }}" {% if sel_status == s %}selected{% endif %}>{{ s }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="filter-group">
+                <label>Sort By</label>
+                <select name="sort">
+                    <option value="created_at" {% if sort == 'created_at' %}selected{% endif %}>Date Added</option>
+                    <option value="title" {% if sort == 'title' %}selected{% endif %}>Title</option>
+                    <option value="category" {% if sort == 'category' %}selected{% endif %}>Category</option>
+                    <option value="priority" {% if sort == 'priority' %}selected{% endif %}>Priority</option>
+                    <option value="status" {% if sort == 'status' %}selected{% endif %}>Status</option>
+                    <option value="target_date" {% if sort == 'target_date' %}selected{% endif %}>Target Date</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <label>Order</label>
+                <select name="order">
+                    <option value="asc" {% if order == 'asc' %}selected{% endif %}>Ascending</option>
+                    <option value="desc" {% if order == 'desc' %}selected{% endif %}>Descending</option>
+                </select>
+            </div>
+            <button type="submit" class="btn btn-filter">Apply</button>
+            <a href="{{ url_for('index') }}" class="btn btn-clear">Clear</a>
+        </form>
+    </section>
+
+    <section class="goals-list">
+        {% if goals %}
+        <table>
+            <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>Category</th>
+                    <th>Priority</th>
+                    <th>Status</th>
+                    <th>Target Date</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for g in goals %}
+                <tr>
+                    <td><a href="{{ url_for('detail', goal_id=g['id']) }}">{{ g['title'] }}</a></td>
+                    <td><span class="badge badge-category">{{ g['category'] }}</span></td>
+                    <td><span class="badge badge-priority badge-{{ g['priority'].lower() }}">{{ g['priority'] }}</span></td>
+                    <td><span class="badge badge-status badge-{{ g['status'].lower().replace(' ', '-') }}">{{ g['status'] }}</span></td>
+                    <td>{{ g['target_date'] or '—' }}</td>
+                    <td class="actions">
+                        <a href="{{ url_for('edit', goal_id=g['id']) }}" class="btn btn-sm btn-edit">Edit</a>
+                        <a href="{{ url_for('delete', goal_id=g['id']) }}" class="btn btn-sm btn-delete">Delete</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <div class="empty">
+            <p>No goals found. <a href="{{ url_for('add') }}">Add your first goal.</a></p>
+        </div>
+        {% endif %}
+    </section>
+</div>
+{% endblock %}

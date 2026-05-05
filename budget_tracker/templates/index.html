@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Budget App</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <header>
+        <h1>Budget Tracker</h1>
+        <a href="{{ url_for('add') }}" class="btn btn-primary">+ Add Item</a>
+    </header>
+
+    <main>
+        <!-- Summary Cards -->
+        <section class="summary">
+            <div class="card card-income">
+                <span class="card-label">Total Income</span>
+                <span class="card-amount">${{ "%.2f"|format(total_income) }}</span>
+            </div>
+            <div class="card card-expense">
+                <span class="card-label">Total Expenses</span>
+                <span class="card-amount">${{ "%.2f"|format(total_expense) }}</span>
+            </div>
+            <div class="card {{ 'card-positive' if balance >= 0 else 'card-negative' }}">
+                <span class="card-label">Balance</span>
+                <span class="card-amount">${{ "%.2f"|format(balance) }}</span>
+            </div>
+        </section>
+
+        <!-- Filter Form -->
+        <section class="filter-section">
+            <form method="GET" action="{{ url_for('index') }}" class="filter-form">
+                <div class="filter-group">
+                    <label for="category">Category</label>
+                    <select name="category" id="category">
+                        <option value="">All Categories</option>
+                        {% for cat in categories %}
+                        <option value="{{ cat }}" {{ 'selected' if selected_category == cat }}>{{ cat }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label for="type">Type</label>
+                    <select name="type" id="type">
+                        <option value="">All Types</option>
+                        <option value="income" {{ 'selected' if selected_type == 'income' }}>Income</option>
+                        <option value="expense" {{ 'selected' if selected_type == 'expense' }}>Expense</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label for="date_from">From Date</label>
+                    <input type="date" name="date_from" id="date_from" value="{{ date_from }}">
+                </div>
+                <div class="filter-group">
+                    <label for="date_to">To Date</label>
+                    <input type="date" name="date_to" id="date_to" value="{{ date_to }}">
+                </div>
+                <div class="filter-actions">
+                    <button type="submit" class="btn btn-secondary">Filter</button>
+                    <a href="{{ url_for('index') }}" class="btn btn-ghost">Clear</a>
+                </div>
+            </form>
+        </section>
+
+        <!-- Items Table -->
+        <section class="table-section">
+            {% if items %}
+            <table>
+                <thead>
+                    <tr>
+                        <th>Category</th>
+                        <th>Name</th>
+                        <th>Type</th>
+                        <th>Date</th>
+                        <th>Amount</th>
+                        <th>Notes</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% set ns = namespace(current_cat='') %}
+                    {% for item in items %}
+                    {% if item.category != ns.current_cat %}
+                    {% set ns.current_cat = item.category %}
+                    <tr class="category-row">
+                        <td colspan="7">{{ item.category }}</td>
+                    </tr>
+                    {% endif %}
+                    <tr>
+                        <td></td>
+                        <td>{{ item.name }}</td>
+                        <td>
+                            <span class="badge {{ 'badge-income' if item.type == 'income' else 'badge-expense' }}">
+                                {{ item.type }}
+                            </span>
+                        </td>
+                        <td>{{ item.date }}</td>
+                        <td class="{{ 'amount-income' if item.type == 'income' else 'amount-expense' }}">
+                            ${{ "%.2f"|format(item.amount) }}
+                        </td>
+                        <td>{{ item.notes or '—' }}</td>
+                        <td class="actions">
+                            <a href="{{ url_for('edit', id=item.id) }}" class="btn btn-sm btn-edit">Edit</a>
+                            <a href="{{ url_for('delete', id=item.id) }}" class="btn btn-sm btn-delete">Delete</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% else %}
+            <p class="empty-msg">No items found. <a href="{{ url_for('add') }}">Add one now.</a></p>
+            {% endif %}
+        </section>
+    </main>
+</body>
+</html>

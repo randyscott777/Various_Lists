@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block title %}{{ meal['name'] }}{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div>
+        <h1>{{ meal['name'] }}</h1>
+        {% if meal['description'] %}
+        <p class="subtitle">{{ meal['description'] }}</p>
+        {% endif %}
+    </div>
+    <div class="header-actions">
+        <a class="btn btn-ghost" href="{{ url_for('index') }}">← Back</a>
+        <a class="btn btn-secondary" href="{{ url_for('meal_edit', meal_id=meal['id']) }}">Edit Meal</a>
+        <a class="btn btn-danger" href="{{ url_for('meal_delete', meal_id=meal['id']) }}">Delete Meal</a>
+    </div>
+</div>
+
+<div class="section-header">
+    <h2>Ingredients <span class="badge">{{ ingredients|length }}</span></h2>
+    <a class="btn btn-primary" href="{{ url_for('ingredient_add', meal_id=meal['id']) }}">+ Add Ingredient</a>
+</div>
+
+{% if ingredients %}
+<table class="data-table">
+    <thead>
+        <tr>
+            <th>Ingredient</th>
+            <th>Quantity</th>
+            <th>Unit</th>
+            <th class="actions-col">Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for ing in ingredients %}
+        <tr>
+            <td class="ing-name">{{ ing['name'] }}</td>
+            <td>{{ ing['quantity'] or '—' }}</td>
+            <td>{{ ing['unit'] or '—' }}</td>
+            <td class="actions-col">
+                <a class="btn btn-sm btn-ghost" href="{{ url_for('ingredient_edit', ing_id=ing['id']) }}">Edit</a>
+                <a class="btn btn-sm btn-danger" href="{{ url_for('ingredient_delete', ing_id=ing['id']) }}">Delete</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% else %}
+<div class="empty-state">
+    <p>No ingredients yet. <a href="{{ url_for('ingredient_add', meal_id=meal['id']) }}">Add one.</a></p>
+</div>
+{% endif %}
+{% endblock %}

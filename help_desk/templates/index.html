@@ -1,0 +1,104 @@
+{% extends "base.html" %}
+{% block title %}Dashboard — Help Desk{% endblock %}
+
+{% block content %}
+<div class="page-header">
+  <h1>Dashboard</h1>
+</div>
+
+<!-- Stat Cards -->
+<div class="stats-grid">
+  <div class="stat-card">
+    <div class="stat-number">{{ stats.total }}</div>
+    <div class="stat-label">Total Tickets</div>
+  </div>
+  <div class="stat-card stat-open">
+    <div class="stat-number">{{ stats.open }}</div>
+    <div class="stat-label">Open</div>
+  </div>
+  <div class="stat-card stat-progress">
+    <div class="stat-number">{{ stats.in_progress }}</div>
+    <div class="stat-label">In Progress</div>
+  </div>
+  <div class="stat-card stat-resolved">
+    <div class="stat-number">{{ stats.resolved }}</div>
+    <div class="stat-label">Resolved</div>
+  </div>
+  <div class="stat-card stat-closed">
+    <div class="stat-number">{{ stats.closed }}</div>
+    <div class="stat-label">Closed</div>
+  </div>
+  <div class="stat-card stat-critical">
+    <div class="stat-number">{{ stats.critical }}</div>
+    <div class="stat-label">Critical</div>
+  </div>
+</div>
+
+<!-- Filter Bar -->
+<div class="filter-section">
+  <form method="GET" action="/" class="filter-form">
+    <label for="status">Status:</label>
+    <select name="status" id="status">
+      <option value="">All</option>
+      {% for s in statuses %}
+        <option value="{{ s }}" {% if s == status_filter %}selected{% endif %}>{{ s }}</option>
+      {% endfor %}
+    </select>
+
+    <label for="priority">Priority:</label>
+    <select name="priority" id="priority">
+      <option value="">All</option>
+      {% for p in priorities %}
+        <option value="{{ p }}" {% if p == priority_filter %}selected{% endif %}>{{ p }}</option>
+      {% endfor %}
+    </select>
+
+    <button type="submit" class="btn btn-secondary">Filter</button>
+    {% if status_filter or priority_filter %}
+      <a href="/" class="btn btn-ghost">Clear</a>
+    {% endif %}
+  </form>
+</div>
+
+<!-- Ticket Table -->
+<div class="table-section">
+  {% if tickets %}
+  <table class="ticket-table">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Title</th>
+        <th>Category</th>
+        <th>Priority</th>
+        <th>Status</th>
+        <th>Assigned To</th>
+        <th>Created</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for t in tickets %}
+      <tr>
+        <td class="td-id">{{ t.id }}</td>
+        <td><a href="{{ url_for('view_ticket', id=t.id) }}" class="ticket-link">{{ t.title }}</a></td>
+        <td>{{ t.category }}</td>
+        <td><span class="badge priority-{{ t.priority | lower }}">{{ t.priority }}</span></td>
+        <td><span class="badge status-{{ t.status | lower | replace(' ', '-') }}">{{ t.status }}</span></td>
+        <td>{{ t.assigned_to if t.assigned_to else '—' }}</td>
+        <td class="td-date">{{ t.created_at }}</td>
+        <td class="td-actions">
+          <a href="{{ url_for('edit_ticket', id=t.id) }}" class="btn btn-sm btn-secondary">Edit</a>
+          <a href="{{ url_for('delete_ticket', id=t.id) }}" class="btn btn-sm btn-danger">Delete</a>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+  <div class="empty-state">
+    <p>No tickets found.</p>
+    <a href="{{ url_for('new_ticket') }}" class="btn btn-primary">Create First Ticket</a>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

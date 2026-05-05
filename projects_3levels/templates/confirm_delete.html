@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Confirm Delete</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<div class="header">
+    <h1>Projects App</h1>
+    <span class="breadcrumb">Confirm Delete</span>
+</div>
+<div class="container">
+    <div class="confirm-card">
+        <h2>Delete {{ item_type }}?</h2>
+        <p>You are about to permanently delete:</p>
+        <p class="item-name">{{ item_name }}</p>
+        {% if warning %}
+        <span class="warning-text">Warning: {{ warning }}</span>
+        {% endif %}
+        <p style="margin-top:10px;">This action cannot be undone.</p>
+        <div class="confirm-actions">
+            <form method="POST">
+                <button type="submit" class="btn btn-danger">Yes, Delete</button>
+            </form>
+            <a href="{{ cancel_url }}" class="btn btn-secondary">Cancel</a>
+        </div>
+    </div>
+</div>
+</body>
+</html>

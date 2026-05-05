@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Bucket List{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <header>
+        <div class="header-inner">
+            <div class="logo">
+                <span class="logo-icon">&#9733;</span>
+                <span class="logo-text">Bucket List</span>
+            </div>
+            <nav>
+                <a href="{{ url_for('index') }}">Dashboard</a>
+                <a href="{{ url_for('add') }}" class="btn-nav">+ Add Item</a>
+            </nav>
+        </div>
+    </header>
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+    <footer>
+        <p>Bucket List &mdash; Live your dreams</p>
+    </footer>
+</body>
+</html>

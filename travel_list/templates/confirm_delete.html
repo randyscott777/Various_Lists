@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block title %}Confirm Delete{% endblock %}
+
+{% block content %}
+<div class="confirm-box">
+    <h2>&#128465; Delete Trip?</h2>
+    <p>You are about to permanently delete:</p>
+    <p><strong>{{ plan.destination }}</strong>
+        {% if plan.start_date %} &mdash; {{ plan.start_date }}{% endif %}
+        {% if plan.end_date %} to {{ plan.end_date }}{% endif %}
+    </p>
+    <p>This action <strong>cannot be undone</strong>.</p>
+
+    <form method="post" action="{{ url_for('delete', plan_id=plan.id) }}">
+        <div class="confirm-actions">
+            <button type="submit" class="btn btn-danger">Yes, Delete</button>
+            <a href="{{ url_for('index') }}" class="btn btn-secondary">Cancel</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

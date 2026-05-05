@@ -1,0 +1,137 @@
+{% extends "base.html" %}
+{% block title %}Travel Plans — Dashboard{% endblock %}
+
+{% block content %}
+
+{# ── Summary cards ── #}
+{% set total     = plans | length %}
+{% set planned   = plans | selectattr('status','equalto','Planned')     | list | length %}
+{% set booked    = plans | selectattr('status','equalto','Booked')      | list | length %}
+{% set progress  = plans | selectattr('status','equalto','In Progress') | list | length %}
+{% set completed = plans | selectattr('status','equalto','Completed')   | list | length %}
+{% set cancelled = plans | selectattr('status','equalto','Cancelled')   | list | length %}
+
+<div class="summary-bar">
+    <div class="summary-card">
+        <div class="label">Total Trips</div>
+        <div class="value">{{ total }}</div>
+    </div>
+    <div class="summary-card planned">
+        <div class="label">Planned</div>
+        <div class="value">{{ planned }}</div>
+    </div>
+    <div class="summary-card booked">
+        <div class="label">Booked</div>
+        <div class="value">{{ booked }}</div>
+    </div>
+    <div class="summary-card progress">
+        <div class="label">In Progress</div>
+        <div class="value">{{ progress }}</div>
+    </div>
+    <div class="summary-card completed">
+        <div class="label">Completed</div>
+        <div class="value">{{ completed }}</div>
+    </div>
+    <div class="summary-card cancelled">
+        <div class="label">Cancelled</div>
+        <div class="value">{{ cancelled }}</div>
+    </div>
+</div>
+
+{# ── Filter / Sort ── #}
+<form method="get" action="{{ url_for('index') }}">
+    <div class="filter-panel">
+        <div>
+            <label>Destination</label>
+            <input type="text" name="filter_destination" value="{{ filter_destination }}" placeholder="Search destination...">
+        </div>
+        <div>
+            <label>Status</label>
+            <select name="filter_status">
+                <option value="">All Statuses</option>
+                {% for s in status_options %}
+                <option value="{{ s }}" {% if filter_status == s %}selected{% endif %}>{{ s }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div>
+            <label>Sort By</label>
+            <select name="sort_field">
+                {% for f in sort_fields %}
+                <option value="{{ f }}" {% if sort_field == f %}selected{% endif %}>{{ f | replace('_',' ') | title }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div>
+            <label>Order</label>
+            <select name="sort_order">
+                <option value="ASC"  {% if sort_order == 'ASC'  %}selected{% endif %}>Ascending</option>
+                <option value="DESC" {% if sort_order == 'DESC' %}selected{% endif %}>Descending</option>
+            </select>
+        </div>
+        <div>
+            <label>&nbsp;</label>
+            <button type="submit" class="btn btn-primary">Apply</button>
+        </div>
+        <div>
+            <label>&nbsp;</label>
+            <a href="{{ url_for('index') }}" class="btn btn-secondary">Reset</a>
+        </div>
+        <div style="margin-left:auto;">
+            <label>&nbsp;</label>
+            <a href="{{ url_for('add') }}" class="btn btn-success">+ Add Trip</a>
+        </div>
+    </div>
+</form>
+
+{# ── Table ── #}
+<div class="table-wrap">
+    {% if plans %}
+    <table>
+        <thead>
+            <tr>
+                <th><a href="?filter_destination={{ filter_destination }}&filter_status={{ filter_status }}&sort_field=destination&sort_order={{ 'DESC' if sort_field=='destination' and sort_order=='ASC' else 'ASC' }}">Destination</a></th>
+                <th><a href="?filter_destination={{ filter_destination }}&filter_status={{ filter_status }}&sort_field=start_date&sort_order={{ 'DESC' if sort_field=='start_date' and sort_order=='ASC' else 'ASC' }}">Start Date</a></th>
+                <th><a href="?filter_destination={{ filter_destination }}&filter_status={{ filter_status }}&sort_field=end_date&sort_order={{ 'DESC' if sort_field=='end_date' and sort_order=='ASC' else 'ASC' }}">End Date</a></th>
+                <th><a href="?filter_destination={{ filter_destination }}&filter_status={{ filter_status }}&sort_field=travelers&sort_order={{ 'DESC' if sort_field=='travelers' and sort_order=='ASC' else 'ASC' }}">Travelers</a></th>
+                <th><a href="?filter_destination={{ filter_destination }}&filter_status={{ filter_status }}&sort_field=status&sort_order={{ 'DESC' if sort_field=='status' and sort_order=='ASC' else 'ASC' }}">Status</a></th>
+                <th><a href="?filter_destination={{ filter_destination }}&filter_status={{ filter_status }}&sort_field=budget&sort_order={{ 'DESC' if sort_field=='budget' and sort_order=='ASC' else 'ASC' }}">Budget</a></th>
+                <th>Notes</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for p in plans %}
+            {% set badge = {
+                'Planned':     'badge-planned',
+                'Booked':      'badge-booked',
+                'In Progress': 'badge-progress',
+                'Completed':   'badge-completed',
+                'Cancelled':   'badge-cancelled'
+            } %}
+            <tr>
+                <td><strong>{{ p.destination }}</strong></td>
+                <td>{{ p.start_date or '—' }}</td>
+                <td>{{ p.end_date   or '—' }}</td>
+                <td>{{ p.travelers }}</td>
+                <td><span class="badge {{ badge.get(p.status, '') }}">{{ p.status }}</span></td>
+                <td>${{ '%.2f' | format(p.budget or 0) }}</td>
+                <td>{{ (p.notes or '')[:60] }}{% if p.notes and p.notes|length > 60 %}…{% endif %}</td>
+                <td>
+                    <div class="actions">
+                        <a href="{{ url_for('edit', plan_id=p.id) }}" class="btn btn-warning btn-sm">Edit</a>
+                        <a href="{{ url_for('delete', plan_id=p.id) }}" class="btn btn-danger btn-sm">Delete</a>
+                    </div>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <div class="empty-state">
+        No travel plans found. <a href="{{ url_for('add') }}">Add your first trip!</a>
+    </div>
+    {% endif %}
+</div>
+
+{% endblock %}

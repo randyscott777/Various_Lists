@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Projects Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<div class="header">
+    <h1>Projects App</h1>
+    <span class="breadcrumb">Dashboard</span>
+</div>
+<div class="container">
+
+    <!-- Stats -->
+    <div class="stats-row">
+        <div class="stat-card">
+            <div class="stat-value">{{ projects | length }}</div>
+            <div class="stat-label">Projects</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-value">{{ projects | selectattr('status', 'equalto', 'In Progress') | list | length }}</div>
+            <div class="stat-label">In Progress</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-value">{{ projects | selectattr('status', 'equalto', 'Done') | list | length }}</div>
+            <div class="stat-label">Done</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-value">{{ projects | selectattr('status', 'equalto', 'Blocked') | list | length }}</div>
+            <div class="stat-label">Blocked</div>
+        </div>
+    </div>
+
+    <!-- Filter / Sort toolbar -->
+    <form method="POST" action="/">
+        <div class="toolbar">
+            <div class="toolbar-group">
+                <label>Filter by Status</label>
+                <select name="filter_status">
+                    <option value="">All Statuses</option>
+                    {% for s in status_options %}
+                    <option value="{{ s }}" {% if filter_status == s %}selected{% endif %}>{{ s }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="toolbar-group">
+                <label>Filter by Priority</label>
+                <select name="filter_priority">
+                    <option value="">All Priorities</option>
+                    {% for p in priority_options %}
+                    <option value="{{ p }}" {% if filter_priority == p %}selected{% endif %}>{{ p }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="toolbar-group">
+                <label>Sort By</label>
+                <select name="sort_field">
+                    <option value="name"       {% if sort_field == 'name' %}selected{% endif %}>Name</option>
+                    <option value="status"     {% if sort_field == 'status' %}selected{% endif %}>Status</option>
+                    <option value="priority"   {% if sort_field == 'priority' %}selected{% endif %}>Priority</option>
+                    <option value="due_date"   {% if sort_field == 'due_date' %}selected{% endif %}>Due Date</option>
+                    <option value="created_at" {% if sort_field == 'created_at' %}selected{% endif %}>Created</option>
+                </select>
+            </div>
+            <div class="toolbar-group">
+                <label>Direction</label>
+                <select name="sort_dir">
+                    <option value="asc"  {% if sort_dir == 'asc' %}selected{% endif %}>Ascending</option>
+                    <option value="desc" {% if sort_dir == 'desc' %}selected{% endif %}>Descending</option>
+                </select>
+            </div>
+            <div class="toolbar-group">
+                <label>&nbsp;</label>
+                <button type="submit" class="btn btn-primary">Apply</button>
+            </div>
+        </div>
+    </form>
+
+    <!-- Add Project -->
+    <div class="action-row">
+        <h2>Projects</h2>
+        <a href="{{ url_for('project_new') }}" class="btn btn-success">+ New Project</a>
+    </div>
+
+    <!-- Projects table -->
+    {% if projects %}
+    <div class="table-wrap">
+        <table>
+            <thead>
+                <tr>
+                    <th>Project Name</th>
+                    <th>Status</th>
+                    <th>Priority</th>
+                    <th>Due Date</th>
+                    <th>Tasks</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for p in projects %}
+            <tr>
+                <td>
+                    <a href="{{ url_for('tasks', project_id=p['id']) }}">{{ p['name'] }}</a>
+                    {% if p['description'] %}<br><small style="color:#888;">{{ p['description'][:80] }}</small>{% endif %}
+                </td>
+                <td>
+                    {% set sc = p['status'] | lower | replace(' ', '-') %}
+                    <span class="badge status-{{ sc }}">{{ p['status'] }}</span>
+                </td>
+                <td>
+                    {% set pc = p['priority'] | lower %}
+                    <span class="badge priority-{{ pc }}">{{ p['priority'] }}</span>
+                </td>
+                <td>{{ p['due_date'] or '—' }}</td>
+                <td><span class="count-badge">{{ p['task_count'] }}</span></td>
+                <td>
+                    <div class="actions">
+                        <a href="{{ url_for('tasks', project_id=p['id']) }}" class="btn btn-primary btn-sm">Tasks</a>
+                        <a href="{{ url_for('project_edit', project_id=p['id']) }}" class="btn btn-warning btn-sm">Edit</a>
+                        <a href="{{ url_for('project_delete', project_id=p['id']) }}" class="btn btn-danger btn-sm">Delete</a>
+                    </div>
+                </td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <div class="empty-state">No projects found. <a href="{{ url_for('project_new') }}">Create your first project</a>.</div>
+    {% endif %}
+
+</div>
+</body>
+</html>

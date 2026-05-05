@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add To-Do</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Add New To-Do</h1>
+            <a href="{{ url_for('index') }}" class="btn btn-back">Back to List</a>
+        </header>
+
+        <div class="form-card">
+            <form method="POST" action="{{ url_for('add') }}">
+                <div class="form-group">
+                    <label for="title">Title <span class="required">*</span></label>
+                    <input type="text" id="title" name="title" required placeholder="Enter to-do title">
+                </div>
+
+                <div class="form-group">
+                    <label for="description">Description</label>
+                    <textarea id="description" name="description" rows="3" placeholder="Optional description"></textarea>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="status">Status</label>
+                        <select id="status" name="status">
+                            {% for s in statuses %}
+                            <option value="{{ s }}" class="status-opt-{{ s | replace(' ', '-') | lower }}"
+                                {% if s == 'Not Started' %}selected{% endif %}>{{ s }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="priority">Priority</label>
+                        <select id="priority" name="priority">
+                            {% for p in priorities %}
+                            <option value="{{ p }}" class="priority-opt-{{ p | lower }}"
+                                {% if p == 'Medium' %}selected{% endif %}>{{ p }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="due_date">Due Date</label>
+                        <input type="date" id="due_date" name="due_date">
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-add">Save To-Do</button>
+                    <a href="{{ url_for('index') }}" class="btn btn-back">Cancel</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

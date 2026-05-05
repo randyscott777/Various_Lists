@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block title %}Delete Ingredient — {{ meal['name'] }}{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1>Delete Ingredient</h1>
+</div>
+
+<div class="confirm-card danger">
+    <div class="confirm-icon">⚠️</div>
+    <h2>Are you sure?</h2>
+    <p>You are about to permanently delete the ingredient <strong>{{ ing['name'] }}</strong> from <strong>{{ meal['name'] }}</strong>. This action cannot be undone.</p>
+    <form method="post" action="{{ url_for('ingredient_delete', ing_id=ing['id']) }}">
+        <div class="form-actions centered">
+            <button class="btn btn-danger" type="submit">Yes, Delete Ingredient</button>
+            <a class="btn btn-ghost" href="{{ url_for('meal_view', meal_id=meal['id']) }}">Cancel</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

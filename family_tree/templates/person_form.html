@@ -1,0 +1,96 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block content %}
+<h2 class="mb-4">{{ title }}</h2>
+
+<form method="post" class="row g-3" style="max-width: 640px;">
+
+    <div class="col-md-6">
+        <label class="form-label">First Name <span class="text-danger">*</span></label>
+        <input type="text" name="first_name" class="form-control" required
+               value="{{ person.first_name if person else '' }}">
+    </div>
+
+    <div class="col-md-6">
+        <label class="form-label">Last Name <span class="text-danger">*</span></label>
+        <input type="text" name="last_name" class="form-control" required
+               value="{{ person.last_name if person else '' }}">
+    </div>
+
+    <div class="col-md-4">
+        <label class="form-label">Gender</label>
+        <select name="gender" class="form-select">
+            <option value="">-- select --</option>
+            {% for g in ['Male', 'Female', 'Other'] %}
+            <option value="{{ g }}" {% if person and person.gender == g %}selected{% endif %}>{{ g }}</option>
+            {% endfor %}
+        </select>
+    </div>
+
+    <div class="col-md-4">
+        <label class="form-label">Birth Date</label>
+        <input type="date" name="birth_date" class="form-control"
+               value="{{ person.birth_date if person and person.birth_date else '' }}">
+    </div>
+
+    <div class="col-md-4">
+        <label class="form-label">Death Date</label>
+        <input type="date" name="death_date" class="form-control"
+               value="{{ person.death_date if person and person.death_date else '' }}">
+    </div>
+
+    <div class="col-12">
+        <label class="form-label">Notes</label>
+        <textarea name="notes" class="form-control" rows="2">{{ person.notes if person and person.notes else '' }}</textarea>
+    </div>
+
+    <hr class="col-12">
+
+    <div class="col-md-6">
+        <label class="form-label">Father</label>
+        <select name="father_id" class="form-select">
+            <option value="">-- none --</option>
+            {% for p in people %}
+            <option value="{{ p.id }}"
+                {% if person and person.father_id == p.id %}selected{% endif %}>
+                {{ p.last_name }}, {{ p.first_name }}
+            </option>
+            {% endfor %}
+        </select>
+    </div>
+
+    <div class="col-md-6">
+        <label class="form-label">Mother</label>
+        <select name="mother_id" class="form-select">
+            <option value="">-- none --</option>
+            {% for p in people %}
+            <option value="{{ p.id }}"
+                {% if person and person.mother_id == p.id %}selected{% endif %}>
+                {{ p.last_name }}, {{ p.first_name }}
+            </option>
+            {% endfor %}
+        </select>
+    </div>
+
+    <div class="col-md-6">
+        <label class="form-label">Spouse</label>
+        <select name="spouse_id" class="form-select">
+            <option value="">-- none --</option>
+            {% for p in people %}
+            <option value="{{ p.id }}"
+                {% if person and person.spouse_id == p.id %}selected{% endif %}>
+                {{ p.last_name }}, {{ p.first_name }}
+            </option>
+            {% endfor %}
+        </select>
+    </div>
+
+    <div class="col-12">
+        <button type="submit" class="btn btn-primary">Save</button>
+        <a href="{{ url_for('index') }}" class="btn btn-secondary ms-2">Cancel</a>
+    </div>
+
+</form>
+{% endblock %}
