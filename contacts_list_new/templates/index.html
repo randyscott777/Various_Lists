@@ -1,0 +1,142 @@
+<!-- Created by Claude Code -->
+{% extends "base.html" %}
+{% block title %}All Contacts{% endblock %}
+{% block content %}
+
+<!-- Stats Dashboard -->
+<section class="stats-grid">
+  <div class="stat-card s-total">
+    <div class="stat-label">Total</div>
+    <div class="stat-num">{{ stats.total }}</div>
+    <div class="stat-bar"><div class="stat-bar-fill" style="width:100%"></div></div>
+  </div>
+  <div class="stat-card s-favorites">
+    <div class="stat-label">&#9733; Favorites</div>
+    <div class="stat-num">{{ stats.favorites }}</div>
+    <div class="stat-bar"><div class="stat-bar-fill" style="width:{% if stats.total %}{{ (stats.favorites / stats.total * 100)|int }}{% else %}0{% endif %}%"></div></div>
+  </div>
+  <div class="stat-card s-active">
+    <div class="stat-label">Active</div>
+    <div class="stat-num">{{ stats.active }}</div>
+    <div class="stat-bar"><div class="stat-bar-fill" style="width:{% if stats.total %}{{ (stats.active / stats.total * 100)|int }}{% else %}0{% endif %}%"></div></div>
+  </div>
+  <div class="stat-card s-archived">
+    <div class="stat-label">Archived</div>
+    <div class="stat-num">{{ stats.archived }}</div>
+    <div class="stat-bar"><div class="stat-bar-fill" style="width:{% if stats.total %}{{ (stats.archived / stats.total * 100)|int }}{% else %}0{% endif %}%"></div></div>
+  </div>
+  <div class="stat-card s-work">
+    <div class="stat-label">Work</div>
+    <div class="stat-num">{{ stats.work }}</div>
+    <div class="stat-bar"><div class="stat-bar-fill" style="width:{% if stats.total %}{{ (stats.work / stats.total * 100)|int }}{% else %}0{% endif %}%"></div></div>
+  </div>
+  <div class="stat-card s-family">
+    <div class="stat-label">Family</div>
+    <div class="stat-num">{{ stats.family }}</div>
+    <div class="stat-bar"><div class="stat-bar-fill" style="width:{% if stats.total %}{{ (stats.family / stats.total * 100)|int }}{% else %}0{% endif %}%"></div></div>
+  </div>
+</section>
+
+<!-- Sticky Filter + Sort Bar -->
+<form method="POST" action="{{ url_for('index') }}" class="controls">
+  <div class="controls-row">
+    <label class="ctrl-label">Type</label>
+    <select name="filter_contact_type" class="ctrl-select">
+      <option value="">All Types</option>
+      {% for ct in contact_types %}
+      <option value="{{ ct }}" {% if filter_contact_type == ct %}selected{% endif %}>{{ ct }}</option>
+      {% endfor %}
+    </select>
+
+    <label class="ctrl-label">Sort by</label>
+    <select name="sort_field" class="ctrl-select">
+      {% for f in sortable_fields %}
+      <option value="{{ f }}" {% if sort_field == f %}selected{% endif %}>{{ f.replace('_', ' ').title() }}</option>
+      {% endfor %}
+    </select>
+
+    <select name="sort_dir" class="ctrl-select ctrl-select-sm">
+      <option value="asc" {% if sort_dir == 'asc' %}selected{% endif %}>&#8593; Asc</option>
+      <option value="desc" {% if sort_dir == 'desc' %}selected{% endif %}>&#8595; Desc</option>
+    </select>
+
+    <button type="submit" class="btn btn-apply">Apply</button>
+    <a href="{{ url_for('clear_prefs') }}" class="btn btn-clear">Reset</a>
+  </div>
+</form>
+
+<!-- Contact Table -->
+{% if contacts %}
+<div class="table-wrap">
+  <table class="contact-table">
+    <thead>
+      <tr>
+        <th class="col-fav">&#9733;</th>
+        <th class="col-name">Name</th>
+        <th class="col-type">Type</th>
+        <th class="col-company">Company</th>
+        <th class="col-email">Email</th>
+        <th class="col-phone">Phone</th>
+        <th class="col-location">City / State</th>
+        <th class="col-actions">Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for c in contacts %}
+      <tr class="contact-row type-{{ c.contact_type | lower }} {% if not c.active %}row-archived{% endif %}">
+        <!-- Favorite toggle -->
+        <td class="col-fav">
+          <form method="POST" action="{{ url_for('toggle_favorite', cid=c.id) }}">
+            <button type="submit" class="btn-star {% if c.favorite %}star-on{% endif %}" title="Toggle favorite">
+              {% if c.favorite %}&#9733;{% else %}&#9734;{% endif %}
+            </button>
+          </form>
+        </td>
+
+        <!-- Name + notes -->
+        <td class="col-name">
+          <a href="{{ url_for('view', cid=c.id) }}" class="contact-name">{{ c.last_name }}, {{ c.first_name }}</a>
+          {% if c.notes %}<div class="contact-notes">{{ c.notes }}</div>{% endif %}
+        </td>
+
+        <!-- Type chip -->
+        <td class="col-type">
+          <span class="chip chip-{{ c.contact_type | lower }}">{{ c.contact_type }}</span>
+        </td>
+
+        <td class="col-company">{{ c.company }}</td>
+        <td class="col-email">{{ c.email }}</td>
+        <td class="col-phone">{{ c.phone }}</td>
+        <td class="col-location">{% if c.city %}{{ c.city }}{% if c.state %}, {{ c.state }}{% endif %}{% endif %}</td>
+
+        <!-- Actions -->
+        <td class="col-actions">
+          <a href="{{ url_for('edit', cid=c.id) }}" class="btn btn-edit" title="Edit">&#9998;</a>
+          <form method="POST" action="{{ url_for('toggle_active', cid=c.id) }}" style="display:inline">
+            <button type="submit" class="btn btn-archive" title="{% if c.active %}Archive{% else %}Restore{% endif %}">
+              {% if c.active %}&#128448;{% else %}&#8635;{% endif %}
+            </button>
+          </form>
+          <a href="{{ url_for('delete', cid=c.id) }}" class="btn btn-delete" title="Delete">&#128465;</a>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+{% else %}
+<!-- Empty State -->
+<div class="empty-state">
+  <div class="empty-illustration">
+    <div class="empty-avatar ea1"></div>
+    <div class="empty-avatar ea2"></div>
+    <div class="empty-avatar ea3"></div>
+  </div>
+  <p class="empty-title">No contacts yet</p>
+  <p class="empty-sub">Start building your network</p>
+  <a href="{{ url_for('add') }}" class="btn btn-new">&#43; Add Your First Contact</a>
+</div>
+{% endif %}
+
+{% endblock %}

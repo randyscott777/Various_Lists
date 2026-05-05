@@ -1,0 +1,29 @@
+<!-- Created by Claude Code -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}Contacts{% endblock %} — Contacts List</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <header class="site-header">
+    <div class="header-inner">
+      <div class="header-brand">
+        <span class="header-icon">&#128100;</span>
+        <h1><a href="{{ url_for('index') }}">Contacts</a></h1>
+      </div>
+      <a href="{{ url_for('add') }}" class="btn btn-new">&#43; New</a>
+    </div>
+  </header>
+
+  <main class="container">
+    {% block content %}{% endblock %}
+  </main>
+
+  <footer class="site-footer">
+    <span>Last updated: {{ last_updated }}</span>
+  </footer>
+</body>
+</html>

@@ -1,0 +1,69 @@
+<!-- Created by Claude Code -->
+{% extends "base.html" %}
+{% block title %}{{ contact.first_name }} {{ contact.last_name }}{% endblock %}
+{% block content %}
+
+<div class="view-card type-{{ contact.contact_type | lower }}">
+  <div class="view-header">
+    <div class="view-avatar">{{ contact.first_name[0] }}{{ contact.last_name[0] }}</div>
+    <div class="view-headline">
+      <h2 class="view-name">
+        {{ contact.first_name }} {{ contact.last_name }}
+        {% if contact.favorite %}<span class="star-on">&#9733;</span>{% endif %}
+      </h2>
+      <div class="view-meta">
+        <span class="chip chip-{{ contact.contact_type | lower }}">{{ contact.contact_type }}</span>
+        {% if not contact.active %}<span class="chip chip-archived">Archived</span>{% endif %}
+        {% if contact.company %}<span class="view-company">{{ contact.company }}</span>{% endif %}
+      </div>
+    </div>
+  </div>
+
+  <div class="view-body">
+    <div class="view-section">
+      {% if contact.email %}
+      <div class="view-field">
+        <span class="vf-label">&#128231; Email</span>
+        <span class="vf-val">{{ contact.email }}</span>
+      </div>
+      {% endif %}
+      {% if contact.phone %}
+      <div class="view-field">
+        <span class="vf-label">&#128222; Phone</span>
+        <span class="vf-val">{{ contact.phone }}</span>
+      </div>
+      {% endif %}
+      {% if contact.address or contact.city %}
+      <div class="view-field">
+        <span class="vf-label">&#128205; Address</span>
+        <span class="vf-val">
+          {% if contact.address %}{{ contact.address }}, {% endif %}
+          {% if contact.city %}{{ contact.city }}{% endif %}
+          {% if contact.state %}, {{ contact.state }}{% endif %}
+          {% if contact.zip %} {{ contact.zip }}{% endif %}
+        </span>
+      </div>
+      {% endif %}
+      {% if contact.notes %}
+      <div class="view-field">
+        <span class="vf-label">&#128221; Notes</span>
+        <span class="vf-val">{{ contact.notes }}</span>
+      </div>
+      {% endif %}
+      {% if contact.created_date %}
+      <div class="view-field">
+        <span class="vf-label">&#128197; Added</span>
+        <span class="vf-val">{{ contact.created_date }}</span>
+      </div>
+      {% endif %}
+    </div>
+  </div>
+
+  <div class="view-actions">
+    <a href="{{ url_for('edit', cid=contact.id) }}" class="btn btn-edit">&#9998; Edit</a>
+    <a href="{{ url_for('delete', cid=contact.id) }}" class="btn btn-delete">&#128465; Delete</a>
+    <a href="{{ url_for('index') }}" class="btn btn-clear">&#8592; Back</a>
+  </div>
+</div>
+
+{% endblock %}
